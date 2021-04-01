@@ -1,0 +1,91 @@
+<html>
+    <head>
+        <title>Torghast Color Puzzle</title>
+    </head>
+
+    <body>
+        <svg width="800" height="600">
+            <rect id="b0" style="fill:blue" />
+            <rect id="b1" style="fill:blue" />
+            <rect id="b2" style="fill:blue" />
+            <rect id="b3" style="fill:blue" />
+            <path id="p41" d="M 100 200 q 150 -300 300 0 l 0 -30 l 0 30 l -30 0" stroke="black" stroke-width="5" fill="none" />
+        </svg>
+
+        <script>
+            const colors = ["blue", "red", "orange", "green", "purple"];
+            const boxsize = 150;
+            const boxdist = 50;
+            const boxmarginx = 25;
+            const boxmarginy = 200;
+            const rounded = 20;
+
+            const arrowheightdifference = 30;
+            const arrowheadsize = 20;
+            const arrowbezier = -100;
+
+            function getRandomInt(max) {
+                return Math.floor(Math.random() * max);
+            }
+
+            function click(idx) {
+                skulls[idx].nextColor();
+                //BL
+            }
+
+            class Skull {
+                constructor(rect, idx) {
+                    this.rect = rect;
+                    this.idx = idx;
+                    this.coloridx = 0;
+                    rect.onclick = () => click(idx);
+                    this.setAttr = (k, v) => rect.setAttribute(k, v);
+                    this.leftx = boxmarginx + idx*boxdist + ((idx>0) ? idx*boxsize : 0);
+                    this.rightx = this.leftx + boxsize;
+                    this.setAttr("x", this.leftx);
+                    this.setAttr("y", boxmarginy);
+                    this.setAttr("rx", rounded);
+                    this.setAttr("ry", rounded);
+                    this.setAttr("width", boxsize);
+                    this.setAttr("height", boxsize);                    
+                }
+    
+                nextColor() {
+                    this.coloridx = ++this.coloridx % colors.length;
+                    this.setAttr("style", "fill:" + colors[this.coloridx]);
+                }
+            }
+    
+            class PointingArrow {
+                constructor(path) {
+                    this.path = path;
+                }
+
+                set(skullA, skullB) {
+                    const lefttoright = skullA.idx < skullB.idx;
+                    const distfactor = Math.abs(skullA.idx - skullB.idx) - 2; //-1, 0, 1
+                    const startx = lefttoright ? skullA.rightx : skullA.leftx;
+                    const endx = (lefttoright ? skullB.leftx : skullB.rightx) - startx;
+                    const bezierx = Math.floor(endx / 2);
+                    const beziery = (distfactor + 2) * arrowbezier;
+                    const arrowheadx = lefttoright ? -arrowheadsize : arrowheadsize;
+                    const y = boxmarginy + distfactor * -arrowheightdifference;
+                    //d="M 100 200 q 150 -300 300 0 l 0 -30 l 0 30 l -30 0"
+
+                    const d = `M ${startx} ${y} q ${bezierx} ${beziery} ${endx} 0 l 0 -${arrowheadsize} l 0 ${arrowheadsize} l ${arrowheadx} 0`
+                    console.log(d);
+                    this.path.setAttribute("d", d);
+                }
+            }
+
+            let skulls = [];
+            for (let i = 0; i < 4; ++i) {
+                skulls[i] = new Skull(document.getElementById("b" + i), i);
+            }
+
+            let pa = new PointingArrow(document.getElementById("p41"));
+
+
+        </script>
+    </body>
+</html>
