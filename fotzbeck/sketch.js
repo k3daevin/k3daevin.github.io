@@ -1,3 +1,16 @@
+
+let X = 400;
+let Y = 300;
+
+function setSize() {
+  var win = window,
+    doc = document,
+    docElem = doc.documentElement,
+    body = doc.getElementsByTagName('body')[0];
+    X = win.innerWidth || docElem.clientWidth || body.clientWidth,
+    Y = win.innerHeight|| docElem.clientHeight|| body.clientHeight;
+}
+
 function touchStarted() {
   click();
   return false;
@@ -13,7 +26,8 @@ function click() {
 }
 
 function setup() {
-  createCanvas(800, 600);
+  setSize();
+  createCanvas(X, Y);
   background(153);
   line(0, 0, width, height);
 }
