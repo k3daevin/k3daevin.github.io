@@ -3,8 +3,24 @@ let X = 400;
 let Y = 300;
 let BLOCKSIZE = 30;
 
+var Screen = class {
+  draw() {}
+  click(x, y) {}
+}
+
+var TechDemo = class extends Screen {
+  draw() {}
+  click(x, y) {
+    ellipse(x, y, 5, 5);
+  }
+}
+
+let techDemo = new TechDemo()
+
+let currentScreen = techDemo
+
 function setSize() {
-  var win = window,
+  let win = window,
     doc = document,
     docElem = doc.documentElement,
     body = doc.getElementsByTagName('body')[0];
@@ -14,12 +30,12 @@ function setSize() {
 }
 
 function touchStarted() {
-  click();
+  currentScreen.click(mouseX, mouseY);
   return false;
 }
 
 function mousePressed() {
-  click();
+  currentScreen.click(mouseX, mouseY);
   return false;
 }
 
@@ -35,5 +51,5 @@ function setup() {
 }
 
 function draw() {
-  // put drawing code here
+  currentScreen.draw();
 }
