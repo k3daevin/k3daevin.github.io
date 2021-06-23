@@ -1,3 +1,8 @@
+let img;
+function preload() {
+  img = loadImage('assets/fotzbeck_orig.jpg');
+}
+
 
 let X = 400;
 let Y = 300;
@@ -9,7 +14,9 @@ var Screen = class {
 }
 
 var TechDemo = class extends Screen {
-  draw() {}
+  draw() {
+    image(img, mouseX, mouseY)
+  }
   click(x, y) {
     ellipse(x, y, 5, 5);
   }
@@ -51,5 +58,6 @@ function setup() {
 }
 
 function draw() {
+  background(255)
   currentScreen.draw();
 }
