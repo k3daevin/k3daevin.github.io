@@ -1,6 +1,7 @@
 
 let X = 400;
 let Y = 300;
+let BLOCKSIZE = 30;
 
 function setSize() {
   var win = window,
@@ -9,6 +10,7 @@ function setSize() {
     body = doc.getElementsByTagName('body')[0];
     X = win.innerWidth || docElem.clientWidth || body.clientWidth,
     Y = win.innerHeight|| docElem.clientHeight|| body.clientHeight;
+    if (x < y) BLOCKSIZE = x/10; else BLOCKSIZE = y/10;
 }
 
 function touchStarted() {
