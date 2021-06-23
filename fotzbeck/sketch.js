@@ -9,7 +9,7 @@ let Y = 300;
 let BLOCKSIZE = 30;
 
 let Screen = class {
-  draw() {}
+  draw(x, y) {}
   click(x, y) {}
 }
 
@@ -19,20 +19,20 @@ let TechDemo = class extends Screen {
     this.bx = 4*BLOCKSIZE;
     this.by = 4*BLOCKSIZE;
   }
-  draw() {
-    image(img, mouseX - this.bx / 2, mouseY - this.by / 2, this.bx, this.by)
+  draw(x, y) {
+    image(img, x - this.bx / 2, y - this.by / 2, this.bx, this.by)
   }
   click(x, y) {
     ellipse(x, y, 5, 5);
   }
 }
 
-let intro = new class extends Screen {
+let Intro = class extends Screen {
   constructor() {
     super();
     this.valid = X > Y
   }
-  draw() {
+  draw(x, y) {
     textSize(32);
     if (this.valid) {
       text('Fotzbeck geht glei los! Klick für Start!', 10, 30);
@@ -40,12 +40,19 @@ let intro = new class extends Screen {
       text('Fotzbeck wird QUER gespielt du Fotz! Klick für Neustart!', 10, 30);
     }
   }
-}()
+  click(x, y) {
+    if (this.valid) {
+      currentScreen = techDemo
+    } else {
+      location.reload()
+    }
+  }
+}
 
 
-let techDemo = new TechDemo()
-
-let currentScreen = intro
+let currentScreen
+let techDemo
+let intro
 
 function setSize() {
   let win = window,
@@ -67,12 +74,12 @@ function mousePressed() {
   return false;
 }
 
-function click() {
-  ellipse(mouseX, mouseY, 5, 5);
-}
-
 function setup() {
   setSize();
+  intro = new Intro()
+  techDemo = new TechDemo()
+  currentScreen = intro
+
   createCanvas(X, Y);
   background(153);
   line(0, 0, width, height);
@@ -80,5 +87,5 @@ function setup() {
 
 function draw() {
   background(255)
-  currentScreen.draw();
+  currentScreen.draw(mouseX, mouseY);
 }
