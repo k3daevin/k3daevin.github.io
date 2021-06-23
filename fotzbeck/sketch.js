@@ -15,6 +15,7 @@ let Screen = class {
 
 let TechDemo = class extends Screen {
   constructor() {
+    super();
     this.bx = 4*BLOCKSIZE;
     this.by = 4*BLOCKSIZE;
   }
@@ -28,14 +29,23 @@ let TechDemo = class extends Screen {
 
 let intro = new class extends Screen {
   constructor() {
-    this.valid = X < Y
+    super();
+    this.valid = X > Y
+  }
+  draw() {
+    textSize(32);
+    if (this.valid) {
+      text('Fotzbeck geht glei los! Klick für Start!', 10, 30);
+    } else {
+      text('Fotzbeck wird QUER gespielt du Fotz! Klick für Neustart!', 10, 30);
+    }
   }
 }()
 
 
 let techDemo = new TechDemo()
 
-let currentScreen = techDemo
+let currentScreen = intro
 
 function setSize() {
   let win = window,
