@@ -8,9 +8,9 @@ function setSize() {
     doc = document,
     docElem = doc.documentElement,
     body = doc.getElementsByTagName('body')[0];
-    x = win.innerWidth || docElem.clientWidth || body.clientWidth,
-    y = win.innerHeight|| docElem.clientHeight|| body.clientHeight;
-    if (x < y) BLOCKSIZE = X/10; else BLOCKSIZE = y/10;
+    X = win.innerWidth || docElem.clientWidth || body.clientWidth,
+    Y = win.innerHeight|| docElem.clientHeight|| body.clientHeight;
+    if (X < Y) BLOCKSIZE = X/10; else BLOCKSIZE = Y/10;
 }
 
 function touchStarted() {
