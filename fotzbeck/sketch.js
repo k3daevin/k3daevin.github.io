@@ -8,19 +8,30 @@ let X = 400;
 let Y = 300;
 let BLOCKSIZE = 30;
 
-var Screen = class {
+let Screen = class {
   draw() {}
   click(x, y) {}
 }
 
-var TechDemo = class extends Screen {
+let TechDemo = class extends Screen {
+  constructor() {
+    this.bx = 4*BLOCKSIZE;
+    this.by = 4*BLOCKSIZE;
+  }
   draw() {
-    image(img, mouseX, mouseY)
+    image(img, mouseX - this.bx / 2, mouseY - this.by / 2, this.bx, this.by)
   }
   click(x, y) {
     ellipse(x, y, 5, 5);
   }
 }
+
+let intro = new class extends Screen {
+  constructor() {
+    this.valid = X < Y
+  }
+}()
+
 
 let techDemo = new TechDemo()
 
