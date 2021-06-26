@@ -18,13 +18,16 @@ let TechDemo = class extends Screen {
     super();
     this.bx = 4*BLOCKSIZE;
     this.by = 4*BLOCKSIZE;
-    this.w = new Widget(X/2, Y/2, img, 4*BLOCKSIZE);
+    this.w = new Widget(X/2, Y/2, img, 4*BLOCKSIZE)
+    this.fotzbeck = new Fotzbeck(img, 4*BLOCKSIZE)
   }
   draw(x, y) {
-    this.w.draw();
+    this.w.draw()
+    this.fotzbeck.draw()
   }
   click(x, y) {
-    this.w.set(x, y);
+    this.w.set(x, y)
+    this.fotzbeck.click(x, y)
   }
 }
 

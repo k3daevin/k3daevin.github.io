@@ -10,6 +10,7 @@ let Widget = class {
     draw() {
         image(this.img, this.x, this.y, this.b, this.b)
     }
+    click(x, y) {}
     set(x, y) {
         this.x = x
         this.y = y
