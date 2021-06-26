@@ -18,11 +18,10 @@ let TechDemo = class extends Screen {
     super();
     this.bx = 4*BLOCKSIZE;
     this.by = 4*BLOCKSIZE;
-    this.w = new Widget(X/2, Y/2, img);
+    this.w = new Widget(X/2, Y/2, img, 4*BLOCKSIZE);
   }
   draw(x, y) {
     this.w.draw();
-    image(img, x, y, this.bx, this.by)
   }
   click(x, y) {
     this.w.set(x, y);

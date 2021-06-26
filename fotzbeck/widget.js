@@ -1,14 +1,14 @@
 let Widget = class {
-    constructor(x, y, img) {
+    constructor(x, y, img, b) {
         this.x = x
         this.y = y
         this.img = img
         this.scale = 1.0
-        this.bx = img.width
-        this.by = img.height
+        this.b = b
+        this.b0 = b
     }
     draw() {
-        image(this.img, this.x, this.y, this.bx, this.by)
+        image(this.img, this.x, this.y, this.b, this.b)
     }
     set(x, y) {
         this.x = x
@@ -16,5 +16,6 @@ let Widget = class {
     }
     rescale(scale) {
         this.scale = scale
+        this.b = scale * this.b0
     }
 }
