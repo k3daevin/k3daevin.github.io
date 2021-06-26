@@ -77,7 +77,7 @@ function mousePressed() {
 }
 
 function setup() {
-  imageMode(CENTER);
+  imageMode(CENTER)
   setSize();
   intro = new Intro()
   techDemo = new TechDemo()
