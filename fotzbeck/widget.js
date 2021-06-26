@@ -10,6 +10,12 @@ let Widget = class {
     draw() {
         image(this.img, this.x, this.y, this.b, this.b)
     }
+    rtl_draw() {
+        push()
+        scale(-1, 1)
+        image(this.img, -this.x, this.y, this.b, this.b)
+        pop()
+    }
     click(x, y) {}
     set(x, y) {
         this.x = x

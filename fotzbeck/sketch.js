@@ -1,35 +1,13 @@
-let img;
+let img = {};
 function preload() {
-  img = loadImage('assets/fotzbeck_orig.jpg');
+  img.fotzbeck = loadImage('assets/fotzbeck_orig.jpg')
+  img.faust = loadImage('assets/faust_orig.jpg')
 }
 
 
 let X = 400;
 let Y = 300;
 let BLOCKSIZE = 30;
-
-let Screen = class {
-  draw(x, y) {}
-  click(x, y) {}
-}
-
-let TechDemo = class extends Screen {
-  constructor() {
-    super();
-    this.bx = 4*BLOCKSIZE;
-    this.by = 4*BLOCKSIZE;
-    this.w = new Widget(X/2, Y/2, img, 4*BLOCKSIZE)
-    this.fotzbeck = new Fotzbeck(img, 4*BLOCKSIZE)
-  }
-  draw(x, y) {
-    this.w.draw()
-    this.fotzbeck.draw()
-  }
-  click(x, y) {
-    this.w.set(x, y)
-    this.fotzbeck.click(x, y)
-  }
-}
 
 let Intro = class extends Screen {
   constructor() {
@@ -46,7 +24,7 @@ let Intro = class extends Screen {
   }
   click(x, y) {
     if (this.valid) {
-      currentScreen = techDemo
+      currentScreen = game
     } else {
       location.reload()
     }
@@ -55,8 +33,8 @@ let Intro = class extends Screen {
 
 
 let currentScreen
-let techDemo
 let intro
+let game
 
 function setSize() {
   let win = window,
@@ -82,7 +60,7 @@ function setup() {
   imageMode(CENTER)
   setSize();
   intro = new Intro()
-  techDemo = new TechDemo()
+  game = new Game()
   currentScreen = intro
 
   createCanvas(X, Y);
