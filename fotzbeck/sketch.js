@@ -18,12 +18,14 @@ let TechDemo = class extends Screen {
     super();
     this.bx = 4*BLOCKSIZE;
     this.by = 4*BLOCKSIZE;
+    this.w = new Widget(X/2, Y/2, img);
   }
   draw(x, y) {
     image(img, x - this.bx / 2, y - this.by / 2, this.bx, this.by)
+    this.w.draw();
   }
   click(x, y) {
-    ellipse(x, y, 5, 5);
+    this.w.set(x, y);
   }
 }
 
