@@ -21,8 +21,8 @@ let TechDemo = class extends Screen {
     this.w = new Widget(X/2, Y/2, img);
   }
   draw(x, y) {
-    image(img, x - this.bx / 2, y - this.by / 2, this.bx, this.by)
     this.w.draw();
+    image(img, x, y, this.bx, this.by)
   }
   click(x, y) {
     this.w.set(x, y);
@@ -77,6 +77,7 @@ function mousePressed() {
 }
 
 function setup() {
+  imageMode(CENTER);
   setSize();
   intro = new Intro()
   techDemo = new TechDemo()

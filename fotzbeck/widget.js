@@ -8,7 +8,7 @@ let Widget = class {
         this.by = img.height
     }
     draw() {
-        image(this.img, this.x - this.bx / 2, this.y - this.by / 2, this.bx, this.by)
+        image(this.img, this.x, this.y, this.bx, this.by)
     }
     set(x, y) {
         this.x = x
