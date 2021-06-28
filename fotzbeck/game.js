@@ -3,6 +3,7 @@ let Game = class extends Screen {
       super();
       this.fotzbeck = new Fotzbeck(img.fotzbeck, 4*BLOCKSIZE)
       this.faust = new Faust(img.faust, 2*BLOCKSIZE)
+      this.level = 1
     }
     draw(x, y) {
       this.faust.draw()

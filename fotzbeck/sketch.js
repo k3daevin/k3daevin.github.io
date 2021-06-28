@@ -1,7 +1,12 @@
 let img = {};
+
 function preload() {
   img.fotzbeck = loadImage('assets/fotzbeck_orig.jpg')
   img.faust = loadImage('assets/faust_orig.jpg')
+  img.fotzen = []
+  img.fotzen.push(loadImage('assets/fotz_orig.jpg'))
+  img.fotzen.push(loadImage('assets/fotz2_orig.png'))
+  img.fotzen.push(loadImage('assets/fotz3_orig.png'))
 }
 
 
@@ -9,27 +14,7 @@ let X = 400;
 let Y = 300;
 let BLOCKSIZE = 30;
 
-let Intro = class extends Screen {
-  constructor() {
-    super();
-    this.valid = X > Y
-  }
-  draw(x, y) {
-    textSize(32);
-    if (this.valid) {
-      text('Fotzbeck geht glei los! Klick für Start!', 10, 30);
-    } else {
-      text('Fotzbeck wird QUER gespielt du Fotz! Klick für Neustart!', 10, 30);
-    }
-  }
-  click(x, y) {
-    if (this.valid) {
-      currentScreen = game
-    } else {
-      location.reload()
-    }
-  }
-}
+
 
 
 let currentScreen
@@ -64,8 +49,7 @@ function setup() {
   currentScreen = intro
 
   createCanvas(X, Y);
-  background(153);
-  line(0, 0, width, height);
+  background(255);
 }
 
 function draw() {
