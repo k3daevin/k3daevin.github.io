@@ -1,4 +1,4 @@
-let img = {};
+
 
 function preload() {
   img.fotzbeck = loadImage('assets/fotzbeck_orig.jpg')
@@ -10,9 +10,7 @@ function preload() {
 }
 
 
-let X = 400;
-let Y = 300;
-let BLOCKSIZE = 30;
+
 
 
 
@@ -20,6 +18,7 @@ let BLOCKSIZE = 30;
 let currentScreen
 let intro
 let game
+
 
 function setSize() {
   let win = window,
@@ -42,10 +41,11 @@ function mousePressed() {
 }
 
 function setup() {
+  frameRate(framerate)
   imageMode(CENTER)
   setSize();
   intro = new Intro()
-  game = new Game()
+  game = new Game(img.fotzen)
   currentScreen = intro
 
   createCanvas(X, Y);
