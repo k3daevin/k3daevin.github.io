@@ -10,6 +10,14 @@ let Game = class extends Screen {
       this.faust.draw()
       this.fotzbeck.draw()
       this.fotzen.draw()
+      textAlign(CENTER)
+      text(`Level: ${this.level}`, X/2, Y/2+Y/4)
+      text(`noch: ${this.fotzen.count()} Fotzen`, X/2, Y/2+Y/4 + 50)
+
+      if (this.fotzen.count() == 0) {
+        this.level++
+        this.fotzen.reset(this.level)
+      }
     }
     click(x, y) {
       this.faust.click(x, y)
