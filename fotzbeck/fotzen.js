@@ -24,7 +24,7 @@ let Fotzen = class {
   
     }
     draw() {
-        if (this.maxFotzen - this.spawnedFotzen > 0 && Math.random() > 0.01) {
+        if (this.maxFotzen - this.spawnedFotzen > 0 && Math.random() < 0.1) {
             let img = this.imgfotzen[getRandomInt(this.imgfotzen.length)]
             this.newFotz()
         }
