@@ -16,7 +16,7 @@ let Game = class extends Screen {
         this.fotzbeck.health -= 5
         this.fotzbeck.rescale((this.fotzbeck.health / 100) * .5 + .5)
         if (this.fotzbeck.health == 0) {
-          currentScreen = gameover
+          currentScreen = new Gameover(this.level)
         }
       }
 

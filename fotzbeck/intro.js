@@ -14,7 +14,7 @@ let Intro = class extends Screen {
     }
     click(x, y) {
       if (this.valid) {
-        currentScreen = game
+        currentScreen = new Game()
       } else {
         location.reload()
       }

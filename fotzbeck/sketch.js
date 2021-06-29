@@ -16,9 +16,8 @@ function preload() {
 
 
 let currentScreen
-let intro
-let game
-let gameover
+
+
 
 function setSize() {
   let win = window,
@@ -44,10 +43,7 @@ function setup() {
   frameRate(framerate)
   imageMode(CENTER)
   setSize();
-  intro = new Intro()
-  game = new Game()
-  gameover = new Gameover()
-  currentScreen = intro
+  currentScreen = new Intro()
 
   createCanvas(X, Y);
   background(255);
