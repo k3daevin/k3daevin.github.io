@@ -11,8 +11,7 @@ let Fotz = class extends Widget {
     }
     draw() {
         let mx = Math.floor(this.speed / framerate)
-        let my = Math.floor(this.speed / framerate / (this.y - Y/2))
-        my = 0
+        let my = (this.y - Y/2) / Math.abs(this.x - X/2) * this.speed / framerate
         this.y -= my
         if (this.ltr == false) {
             this.x -= mx
