@@ -11,6 +11,7 @@ let Game = class extends Screen {
       this.fotzbeck.draw()
       this.fotzen.draw()
       textAlign(CENTER)
+      fill('black')
       text(`Level: ${this.level}`, X/2, Y/2+Y/4)
       text(`noch: ${this.fotzen.count()} Fotzen`, X/2, Y/2+Y/4 + 50)
 
