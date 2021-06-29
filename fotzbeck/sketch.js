@@ -54,6 +54,5 @@ function setup() {
 }
 
 function draw() {
-  background(255)
   currentScreen.draw(mouseX, mouseY);
 }

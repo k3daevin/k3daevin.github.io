@@ -7,6 +7,7 @@ let Game = class extends Screen {
       this.level = 1
     }
     draw(x, y) {
+      background(255)
       this.faust.draw()
       this.fotzbeck.draw()
       this.fotzen.draw()

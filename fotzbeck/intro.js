@@ -4,6 +4,7 @@ let Intro = class extends Screen {
       this.valid = X > Y
     }
     draw(x, y) {
+      background(255)
       textSize(32);
       if (this.valid) {
         text('Fotzbeck v1.1 geht glei los! Klick für Start!', 10, 30);
