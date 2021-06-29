@@ -10,6 +10,11 @@ let Game = class extends Screen {
       this.faust.draw()
       this.fotzbeck.draw()
       this.fotzen.draw()
+
+      if (this.fotzen.collision()) {
+        this.fotzbeck.health -= 5
+      }
+
       textAlign(CENTER)
       fill('black')
       text(`Level: ${this.level}`, X/2, Y/2+Y/4)

@@ -7,6 +7,7 @@ let Fotz = class extends Widget {
         this.ltr = ltr
         this.speed = speed
         this.live = true
+        this.hit = false //Fotzbeck getroffen
         this.b2 = this.b / 2
     }
     draw() {
@@ -16,10 +17,18 @@ let Fotz = class extends Widget {
         if (this.ltr == false) {
             this.x -= mx
             super.rtl_draw()
+            if (this.x < X/2) {
+                this.hit = true
+            }
         } else {
             this.x += mx
             super.draw()
+            if (this.x > X/2) {
+                this.hit = true
+            }
         }
+
+
     }
     click(x, y) {
         if (this.x - this.b2 < x && x < this.x + this.b2 && 

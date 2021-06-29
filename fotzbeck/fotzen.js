@@ -21,11 +21,19 @@ let Fotzen = class {
         let img = this.imgfotzen[getRandomInt(this.imgfotzen.length)]
         this.fotzen.add(new Fotz(img, this.speed))
         this.spawnedFotzen++
-  
+    }
+    collision() {
+        let anyhit = false
+        for (let fotz of this.fotzen) {
+            if (fotz.hit == true) {
+                anyhit = true
+                fotz.live = false
+            }
+        }
+        return anyhit
     }
     draw() {
         if (this.maxFotzen - this.spawnedFotzen > 0 && Math.random() < 0.1) {
-            let img = this.imgfotzen[getRandomInt(this.imgfotzen.length)]
             this.newFotz()
         }
         for (let fotz of this.fotzen) {
