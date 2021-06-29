@@ -10,13 +10,8 @@ function preload() {
 }
 
 
-
-
-
-
-
 let currentScreen
-
+let highscore
 
 
 function setSize() {
@@ -43,6 +38,7 @@ function setup() {
   frameRate(framerate)
   imageMode(CENTER)
   setSize();
+  highscore = new Highscore()
   currentScreen = new Intro()
 
   createCanvas(X, Y);
