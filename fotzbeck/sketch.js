@@ -45,7 +45,7 @@ function setup() {
   imageMode(CENTER)
   setSize();
   intro = new Intro()
-  game = new Game(img.fotzen)
+  game = new Game()
   gameover = new Gameover()
   currentScreen = intro
 

@@ -1,9 +1,9 @@
 let Game = class extends Screen {
-    constructor(imgfotzen) {
+    constructor() {
       super();
       this.fotzbeck = new Fotzbeck(img.fotzbeck, 4*BLOCKSIZE)
       this.faust = new Faust(img.faust, 2*BLOCKSIZE)
-      this.fotzen = new Fotzen(imgfotzen)
+      this.fotzen = new Fotzen(img.fotzen)
       this.level = 1
     }
     draw(x, y) {
