@@ -13,6 +13,9 @@ let Game = class extends Screen {
 
       if (this.fotzen.collision()) {
         this.fotzbeck.health -= 5
+        if (this.fotzbeck.health == 0) {
+          currentScreen = gameover
+        }
       }
 
       textAlign(CENTER)

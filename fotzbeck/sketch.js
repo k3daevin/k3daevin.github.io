@@ -18,7 +18,7 @@ function preload() {
 let currentScreen
 let intro
 let game
-
+let gameover
 
 function setSize() {
   let win = window,
@@ -46,6 +46,7 @@ function setup() {
   setSize();
   intro = new Intro()
   game = new Game(img.fotzen)
+  gameover = new Gameover()
   currentScreen = intro
 
   createCanvas(X, Y);
