@@ -9,7 +9,11 @@ let Highscore = class {
         return window.localStorage.getItem(this.key)
     }
     write(level) {
-        window.localStorage.setItem(this.key, level)
+        try {
+            window.localStorage.setItem(this.key, level)
+        } catch (e) {
+            
+        }
     }
 
 }
