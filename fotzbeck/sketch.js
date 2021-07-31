@@ -38,6 +38,7 @@ function setup() {
   frameRate(framerate)
   imageMode(CENTER)
   setSize();
+  textSize(BLOCKSIZE)
   highscore = new Highscore()
   currentScreen = new Intro()
 
