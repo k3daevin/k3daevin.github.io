@@ -44,6 +44,8 @@ function setup() {
   let buttonWidth = X/4
   let buttonHeight = BLOCKSIZE
   
+
+  //TODO in eigene Klasse auslagern
   startButton = createButton('Start')
   startButton.position(0, Y/2)
   startButton.size(buttonWidth, buttonHeight)
