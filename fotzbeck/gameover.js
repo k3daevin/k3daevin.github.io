@@ -16,6 +16,8 @@ let Gameover = class extends Screen {
             this.newHighscore = " Neuer Highscore!"
             this.highscore = level
         }
+        startButton.show()
+        highscoreButton.show()
     }
     draw(x, y) {
         fill(getRandomInt(255), getRandomInt(255), getRandomInt(255))
