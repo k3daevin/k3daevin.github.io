@@ -13,11 +13,11 @@ let Intro = class extends Screen {
       background(255)
       textSize(32);
       if (this.valid()) {
-        text('Fotzbeck v1.2.1 geht glei los! Los gehts!', 10, 30);
+        text('Fotzbeck v1.3.0 geht glei los! Los gehts!', 10, 30);
         startButton.show()
         highscoreButton.show()
       } else {
-        text('Fotzbeck v1.2.1 wird QUER gespielt du Fotz! Drehen!', 10, 30);
+        text('Fotzbeck v1.3.0 wird QUER gespielt du Fotz! Drehen!', 10, 30);
         startButton.hide()
         highscoreButton.hide()
       }
