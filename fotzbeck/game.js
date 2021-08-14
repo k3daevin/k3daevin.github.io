@@ -6,6 +6,7 @@ let Game = class extends Screen {
       this.fotzen = new Fotzen(img.fotzen)
       this.level = 1
       highscoreButton.hide()
+      textSize(BLOCKSIZE)
     }
     draw(x, y) {
       background(255)

@@ -19,6 +19,7 @@ let Gameover = class extends Screen {
         startButton.show()
         highscoreButton.show()
         highscore.fetchNewHighscore()
+        textSize(BLOCKSIZE)
     }
     draw(x, y) {
         fill(getRandomInt(255), getRandomInt(255), getRandomInt(255))
