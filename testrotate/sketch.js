@@ -29,4 +29,7 @@ function draw() {
   background(220);
   line(0, 0, X, Y)
   line(0, Y, X, 0)
+  for (let i = 0; i < 3; ++i) {
+    circle((2+i)*BLOCKSIZE, 2*BLOCKSIZE, BLOCKSIZE)
+  }
 }
