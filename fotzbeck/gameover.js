@@ -16,6 +16,9 @@ let Gameover = class extends Screen {
             this.newHighscore = " Neuer Highscore!"
             this.highscore = level
         }
+        startButton.show()
+        highscoreButton.show()
+        highscore.fetchNewHighscore()
     }
     draw(x, y) {
         fill(getRandomInt(255), getRandomInt(255), getRandomInt(255))
@@ -28,12 +31,10 @@ let Gameover = class extends Screen {
         if (this.waitSeconds > 0) {
             text(`Continue in ${this.waitSeconds}`, X/2, Y/2+3*BLOCKSIZE)       
         } else {
-            text("Klicken für Continue", X/2, Y/2+3*BLOCKSIZE)
+            //text("Klicken für Continue", X/2, Y/2+3*BLOCKSIZE)
         }
     }
     click(x, y) {
-        if (this.waitSeconds == 0) {
-            currentScreen = new Game()
-        }
+
     }
 }
