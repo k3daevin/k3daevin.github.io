@@ -12,6 +12,10 @@ let Highscore = class extends Screen {
 
         if ((this.id = this.readId()) == null) {
             this.generateId()
+            if (this.read()) {
+                this.write(this.read())
+            }
+
         }
 
         if (this.read() == null) {
