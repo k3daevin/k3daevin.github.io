@@ -39,6 +39,8 @@ let canvas
 
 function resize() {
   setSize()
+  startButton.position(0, Y/2)
+  highscoreButton.position(0, Y/2+Y/4)
   resizeCanvas(X, Y)
 }
 
