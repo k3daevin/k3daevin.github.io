@@ -37,6 +37,11 @@ function mousePressed() {
 
 let canvas
 
+function resize() {
+  setSize()
+  resizeCanvas(X, Y)
+}
+
 function setup() {
   frameRate(framerate)
   imageMode(CENTER)
@@ -74,6 +79,8 @@ function setup() {
   highscore = new Highscore()
   currentScreen = new Intro()
   canvas = createCanvas(X, Y);
+  window.addEventListener('resize', resize);
+  resize()
   background(255);
 }
 

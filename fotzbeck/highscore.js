@@ -104,7 +104,7 @@ let Highscore = class extends Screen {
             let len = min(this.namen.length, this.level.length)
             textSize(BLOCKSIZE/2)
             for (var i = 0; i < len; ++i) {
-                text(`${i+1}: ${this.namen[i]} (${this.level[i]})`, X/2, (i+1)*BLOCKSIZE/2)
+                text(`${i+1}: ${this.namen[i]} (${this.level[i]})`, X/2, (i+1)*BLOCKSIZE*.75)
             }
         }
     }
