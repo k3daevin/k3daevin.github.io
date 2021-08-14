@@ -8,28 +8,35 @@ let Game = class extends Screen {
       highscoreButton.hide()
       textSize(BLOCKSIZE)
     }
+    valid() {
+      return X > Y
+    }
     draw(x, y) {
       background(255)
-      this.faust.draw()
-      this.fotzbeck.draw()
-      this.fotzen.draw()
+      if (this.valid()) {
+        this.faust.draw()
+        this.fotzbeck.draw()
+        this.fotzen.draw()
 
-      if (this.fotzen.collision()) {
-        this.fotzbeck.health -= 5
-        this.fotzbeck.rescale((this.fotzbeck.health / 100) * .5 + .5)
-        if (this.fotzbeck.health == 0) {
-          currentScreen = new Gameover(this.level)
+        if (this.fotzen.collision()) {
+          this.fotzbeck.health -= 5
+          this.fotzbeck.rescale((this.fotzbeck.health / 100) * .5 + .5)
+          if (this.fotzbeck.health == 0) {
+            currentScreen = new Gameover(this.level)
+          }
         }
-      }
 
-      textAlign(CENTER)
-      fill('black')
-      text(`Level: ${this.level}`, X/2, Y/2+Y/4)
-      text(`noch: ${this.fotzen.count()} Fotzen`, X/2, Y/2+Y/4 + 50)
+        textAlign(CENTER)
+        fill('black')
+        text(`Level: ${this.level}`, X/2, Y/2+Y/4)
+        text(`noch: ${this.fotzen.count()} Fotzen`, X/2, Y/2+Y/4 + 50)
 
-      if (this.fotzen.count() == 0) {
-        this.level++
-        this.fotzen.reset(this.level)
+        if (this.fotzen.count() == 0) {
+          this.level++
+          this.fotzen.reset(this.level)
+        }
+      } else {
+        text('QUER SPIELEN', X/2, Y/2)
       }
     }
     click(x, y) {

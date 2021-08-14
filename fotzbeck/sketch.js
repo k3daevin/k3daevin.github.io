@@ -60,8 +60,12 @@ function setup() {
   startButton.size(buttonWidth, buttonHeight)
   startButton.class('btn btn-4 btn-sep icon-send')
   let startFunc = function() {
-    currentScreen = new Game()
-    startButton.hide()
+    if (X > Y) {
+      currentScreen = new Game()
+      startButton.hide()
+    } else {
+      window.alert("FOTZBECK WIRD QUER GESPIELT!")
+    }
   }
   startButton.mousePressed(startFunc)
   startButton.touchStarted(startFunc)
