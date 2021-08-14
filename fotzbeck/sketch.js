@@ -34,6 +34,8 @@ function mousePressed() {
   return false;
 }
 
+let canvas
+
 function setup() {
   frameRate(framerate)
   imageMode(CENTER)
@@ -42,7 +44,7 @@ function setup() {
   highscore = new Highscore()
   currentScreen = new Intro()
 
-  createCanvas(X, Y);
+  canvas = createCanvas(X, Y);
   background(255);
 }
 
