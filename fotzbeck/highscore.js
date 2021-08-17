@@ -30,6 +30,7 @@ let Highscore = class extends Screen {
     fetchNewHighscore() {
         this.namen = null
         this.level = null
+        this.hasData = false
         api_get(json => {
             this.namen = json.name
             this.level = json.level
