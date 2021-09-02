@@ -1,2 +1,1 @@
-# geplante Features
-* Meme Faces, Fotzbeck als Angry Henny, Fotzen als ???
+Hier gehts zum Game: [fotzbeck.de](https://fotzbeck.de)
