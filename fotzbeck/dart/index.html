@@ -229,7 +229,7 @@
             <div class="row" v-for="row in symbole.allSymbols">
                 <div class="col" v-for="item in row">
                     <button 
-                        class="btn w-100 h-100"
+                        class="btn w-100 h-100 btn-lg"
                         :class="item.highlight ? 'btn-info' : 'btn-primary'"
                         v-on:click="klickSymbol(item.value)"
                         :key="item.value"
