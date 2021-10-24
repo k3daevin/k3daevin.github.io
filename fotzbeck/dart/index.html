@@ -223,7 +223,7 @@
     </script>
 </head>
 <body>
-    <div id="app" class="h-100">
+    <div id="app" class="h-100 w-100">
         <div class="container h-15">
             <div class="row">
                 <div 
@@ -240,16 +240,18 @@
             </div>
 
         </div>
-        <div class="container h-70">
-            <div class="row symbutton" v-for="row in symbole.allSymbols">
+        <div class="container h-70 w-100">
+            <div class="row symbutton w-100" v-for="row in symbole.allSymbols">
                 <div class="col" v-for="item in row">
                     <button 
                         class="btn w-100 h-100 btn-lg"
                         :class="item.highlight ? 'btn-info' : 'btn-primary'"
                         v-on:click="klickSymbol(item.value)"
                         :key="item.value"
-                    ><h1>{{ item.display }}</h1>
-                        
+                    >
+                        <h1>
+                            {{ item.display }}
+                        </h1>
                     </button>
                 </div>
             </div>
@@ -257,7 +259,7 @@
         <div class="container h-15">
             <div class="row">
                 <div class="col">
-                    <h2>{{ game.currentSpieler.name }}</h2><h3>{{ game.currentSpielerPoints }}</h3>
+                    <h2>{{ game.currentSpieler.name }}</h2><h1>{{ game.currentSpielerPoints }}</h1>
                 </div>
             </div>
             <div class="row">
