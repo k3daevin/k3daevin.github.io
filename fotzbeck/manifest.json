@@ -1,5 +1,8 @@
 {
- "name": "App",
+ "name": "Fotzbeck",
+ "display": "standalone",
+ "start_url": "/",
+ "scope": "/",
  "icons": [
   {
    "src": "\/android-icon-36x36.png",
