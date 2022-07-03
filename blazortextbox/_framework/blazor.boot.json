@@ -7,7 +7,7 @@
   "linkerEnabled": true,
   "resources": {
     "assembly": {
-      "BlazorTextboxAsyncHttp.Client.dll": "sha256-XAVbBc3DdC6yuBtil0YvyiqXuXU3ZfwngWXgyUED7Ws=",
+      "BlazorTextboxAsyncHttp.Client.dll": "sha256-tOmcGK2QivLA3OWvyoWVkIoNEAYuoFEcMr3\/gAHWU0s=",
       "BlazorTextboxAsyncHttp.Shared.dll": "sha256-8JkQWQ9kppp6ONvWIMy+YPM2EKNyOVkMJzLcW1w4oD0=",
       "Microsoft.AspNetCore.Components.dll": "sha256-8dqThl7DR5nkVkeRDD5qT96JI\/I+pmFPZBlwMV4DU2o=",
       "Microsoft.AspNetCore.Components.Web.dll": "sha256-03tPHPLltVMpajn385JsGgoMHJ6OaFd9h1TdzU8e940=",
