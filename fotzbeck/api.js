@@ -1,4 +1,5 @@
-APIURL = "https://fotzbeckapi-2-l1955998.deta.app/"
+//APIURL = "https://fotzbeckapi-2-l1955998.deta.app/"
+APIURL = "https://fotzbeck.deta.dev"
 
 function api_post(id, level, name, callback) {
     var xhr = new XMLHttpRequest();
