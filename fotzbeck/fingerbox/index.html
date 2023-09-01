@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Div-Container mit Rahmen</title>
+
+    <!-- Bootstrap CSS über CDN einbinden -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+
+
+    <!-- Eigene CSS-Anpassungen -->
+    <style>
+        .square-container {
+            width: 12.5%; /* 1/8 der Bildschirmbreite */
+            padding-bottom: 12.5%; /* 1/8 der Bildschirmbreite (gleiches Verhältnis für quadratischen Container) */
+            background-color: lightgray; /* Hintergrundfarbe */
+            border: 1px solid black; /* Rahmen um den Container (optional) */
+            margin: 10px; /* Abstand zwischen den Containern (optional) */
+            display: inline-block; /* Container nebeneinander anzeigen */
+            position: absolute; /* Positionierung auf der Seite */
+        }
+
+        /* Stil für Container 1 */
+        #container1 {
+            left: 0; /* Container 1 auf der linken Seite positionieren */
+        }
+
+        /* Stil für Container 2 */
+        #container2 {
+            right: 0; /* Container 2 auf der rechten Seite positionieren */
+            cursor: grab; /* Zeige "Hand" Cursor beim Bewegen */
+        }        
+    </style>
+
+</head>
+<body>
+
+<!-- Quadratischer Div-Container 1 -->
+<div id="container1" class="square-container">
+</div>
+
+<!-- Quadratischer Div-Container 2 -->
+<div id="container2" class="square-container">
+</div>
+
+<script>
+    const container1 = document.getElementById("container1");
+    const container2 = document.getElementById("container2");
+
+    //Initiale Positionierung
+    const screenWidth = window.innerWidth;
+    const screenHeight = window.innerHeight;
+
+    const px = i => i + "px";
+
+    container1.style.left = px(Math.random() * (screenWidth / 2));
+    container1.style.top = px(Math.random() * (screenHeight - container1.clientHeight));
+
+    container2.style.left = px(Math.random() * (screenWidth / 2) + screenWidth / 2 - container2.clientWidth);
+    container2.style.top = px(Math.random() * (screenHeight - container2.clientHeight));
+
+    //Draggen
+    let isDragging = false;
+    let offset = { x: 0, y: 0 };
+
+    container2.addEventListener("mousedown", startDrag);
+    container2.addEventListener("mousemove", drag);
+    container2.addEventListener("mouseup", endDrag);
+
+    container2.addEventListener("touchstart", startDrag);
+    container2.addEventListener("touchmove", drag);
+    container2.addEventListener("touchend", endDrag);
+
+    function startDrag(e) {
+        isDragging = true;
+
+        if (e.type === "touchstart") {
+            offset.x = e.touches[0].clientX - container2.getBoundingClientRect().left;
+            offset.y = e.touches[0].clientY - container2.getBoundingClientRect().top;
+        } else {
+            offset.x = e.clientX - container2.getBoundingClientRect().left;
+            offset.y = e.clientY - container2.getBoundingClientRect().top;
+        }
+    }
+
+    function drag(e) {
+        if (!isDragging) return;
+
+        e.preventDefault();
+
+        let x, y;
+
+        if (e.type === "touchmove") {
+            x = e.touches[0].clientX - offset.x;
+            y = e.touches[0].clientY - offset.y;
+        } else {
+            x = e.clientX - offset.x;
+            y = e.clientY - offset.y;
+        }
+
+        container2.style.left = x + "px";
+        container2.style.top = y + "px";
+    }
+
+    function endDrag() {
+        isDragging = false;
+    }
+</script>
+
+</body>
+</html>
