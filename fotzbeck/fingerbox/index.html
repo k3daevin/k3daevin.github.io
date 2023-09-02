@@ -66,7 +66,9 @@
     container2.style.left = px(Math.random() * (screenWidth / 2) + screenWidth / 2 - container2.clientWidth);
     container2.style.top = px(Math.random() * (screenHeight - container2.clientHeight));
 
+    const saveInterval = 100;
     let counter = loadCounterFromLocalStorage();
+    let nextSaveCounter = counter + saveInterval;
     let isOverlapping = false;
     let isDragging = false;
     let offset = { x: 0, y: 0 };
@@ -93,13 +95,19 @@
         }
         counter++;
         printCounter();        
-        saveCounterToLocalStorage(counter);
+        if (counter > nextSaveCounter) {
+            saveCounterToLocalStorage(counter);
+            nextSaveCounter = counter + saveInterval;
+        }
     }
+
+    window.addEventListener('beforeunload', () => saveCounterToLocalStorage(counter));
+
 
     printCounter();
 
-    // Starten des Timers für das Hochzählen (alle 1000 Millisekunden)
-    setInterval(updateCounter, 1000);
+    // Starten des Timers für das Hochzählen (alle 10 Millisekunden)
+    setInterval(updateCounter, 10);
 
     //Draggen 
     container2.addEventListener("mousedown", startDrag);
@@ -112,6 +120,7 @@
 
     function startDrag(e) {
         isDragging = true;
+        saveCounterToLocalStorage(counter);
 
         if (e.type === "touchstart") {
             offset.x = e.touches[0].clientX - container2.getBoundingClientRect().left;
