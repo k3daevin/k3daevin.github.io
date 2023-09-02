@@ -6,8 +6,8 @@
     <title>Div-Container mit Rahmen</title>
 
     <!-- Bootstrap CSS über CDN einbinden -->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
-
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
 
     <!-- Eigene CSS-Anpassungen -->
     <style>
@@ -15,7 +15,6 @@
             width: 12.5%; /* 1/8 der Bildschirmbreite */
             padding-bottom: 12.5%; /* 1/8 der Bildschirmbreite (gleiches Verhältnis für quadratischen Container) */
             background-color: lightgray; /* Hintergrundfarbe */
-            border: 1px solid black; /* Rahmen um den Container (optional) */
             margin: 10px; /* Abstand zwischen den Containern (optional) */
             display: inline-block; /* Container nebeneinander anzeigen */
             position: absolute; /* Positionierung auf der Seite */
@@ -37,11 +36,11 @@
 <body>
 
 <!-- Quadratischer Div-Container 1 -->
-<div id="container1" class="square-container">
+<div id="container1" class="square-container border border-5 border-primary">
 </div>
 
 <!-- Quadratischer Div-Container 2 -->
-<div id="container2" class="square-container">
+<div id="container2" class="square-container border border-5 border-danger">
 </div>
 
 <script>
