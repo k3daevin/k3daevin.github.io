@@ -32,7 +32,7 @@
         }        
 
         /* CSS, um den Text als nicht markierbar zu setzen */
-        #counterValue {
+        p {
             user-select: none;
         }
     </style>
@@ -41,6 +41,11 @@
 <body>
     <p>Counter-Wert: <span id="counterValue">0</span></p>
 
+    <div>
+        <p class="mb-0">Jimmies Status:</p>
+        <p class="mb-0">[<span id="xUnrustled" class="visible">X</span>] Unrustled</p>
+        <p class="mb-0">[<span id="xRustled" class="invisible">X</span>] Rustled</p>
+    </div>
     <!-- Quadratischer Div-Container 1 -->
     <div id="container1" class="square-container border border-5 border-primary">
     </div>
@@ -53,6 +58,9 @@
 
     const container1 = document.getElementById("container1");
     const container2 = document.getElementById("container2");
+
+    const xUnrustled = document.getElementById("xUnrustled");
+    const xRustled = document.getElementById("xRustled");
 
     //Initiale Positionierung
     const screenWidth = window.innerWidth;
@@ -158,6 +166,8 @@
         } else {
             console.log("Die Div-Container überlappen nicht.");
         }
+
+        rustle(isOverlapping);
     }
 
     function doDivsOverlap(div1, div2) {
@@ -171,6 +181,21 @@
             rect1.bottom > rect2.top
         );
     }    
+
+    //Jimmies
+    function rustle(status) {
+        if (status) {
+            xUnrustled.classList.remove("visible");
+            xUnrustled.classList.add("invisible");
+            xRustled.classList.remove("invisible");
+            xRustled.classList.add("visible");
+        } else {
+            xUnrustled.classList.remove("invisible");
+            xUnrustled.classList.add("visible");
+            xRustled.classList.remove("visible");
+            xRustled.classList.add("invisible");
+        }
+    }
 </script>
 
 </body>
