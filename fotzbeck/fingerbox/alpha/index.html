@@ -30,27 +30,20 @@
             right: 0; /* Container 2 auf der rechten Seite positionieren */
             cursor: grab; /* Zeige "Hand" Cursor beim Bewegen */
         }        
-
-        /* CSS, um den Text als nicht markierbar zu setzen */
-        #counterValue {
-            user-select: none;
-        }
     </style>
 
 </head>
 <body>
-    <p>Counter-Wert: <span id="counterValue">0</span></p>
 
-    <!-- Quadratischer Div-Container 1 -->
-    <div id="container1" class="square-container border border-5 border-primary">
-    </div>
+<!-- Quadratischer Div-Container 1 -->
+<div id="container1" class="square-container border border-5 border-primary">
+</div>
 
-    <!-- Quadratischer Div-Container 2 -->
-    <div id="container2" class="square-container border border-5 border-danger">
-    </div>
+<!-- Quadratischer Div-Container 2 -->
+<div id="container2" class="square-container border border-5 border-danger">
+</div>
 
 <script>
-
     const container1 = document.getElementById("container1");
     const container2 = document.getElementById("container2");
 
@@ -66,40 +59,10 @@
     container2.style.left = px(Math.random() * (screenWidth / 2) + screenWidth / 2 - container2.clientWidth);
     container2.style.top = px(Math.random() * (screenHeight - container2.clientHeight));
 
-    let counter = loadCounterFromLocalStorage();
+    let score = 0n;
     let isOverlapping = false;
     let isDragging = false;
     let offset = { x: 0, y: 0 };
-
-    //Counter
-    // Funktion, um den Counter-Wert im Local Storage zu speichern
-    function saveCounterToLocalStorage(counterValue) {
-        localStorage.setItem('counter', counterValue);
-    }
-
-    // Funktion, um den Counter-Wert aus dem Local Storage zu laden
-    function loadCounterFromLocalStorage() {
-        const counterValue = localStorage.getItem('counter');
-        return counterValue ? parseInt(counterValue) : 0;
-    }
-
-    function printCounter() {
-        document.getElementById("counterValue").textContent = counter;
-    }
-
-    function updateCounter() {
-        if (isDragging || !isOverlapping) {
-            return;
-        }
-        counter++;
-        printCounter();        
-        saveCounterToLocalStorage(counter);
-    }
-
-    printCounter();
-
-    // Starten des Timers für das Hochzählen (alle 1000 Millisekunden)
-    setInterval(updateCounter, 1000);
 
     //Draggen 
     container2.addEventListener("mousedown", startDrag);
