@@ -101,7 +101,7 @@
         if (isDragging || !isOverlapping) {
             return;
         }
-        counter++;
+        counter--;
         printCounter();        
         if (counter > nextSaveCounter) {
             saveCounterToLocalStorage(counter);
