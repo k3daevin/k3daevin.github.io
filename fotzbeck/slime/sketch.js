@@ -1,20 +1,26 @@
 const X = 800
 const Y = 800
-const DIFF = 0.01
+let DIFF = 0.01
 const DIFF_THRESH = 1e-4 //alles da drunter wird nicht mehr diffundiert
-const SCALE = 0.001
+let SCALE = 0.001
 const SCALE_THRESH = 1e-6 //alles da drunter wird auf 0 gesetzt
 const N_AGENTS = 10000
 const AGENT_SIZE = 5
 const AGENT_SPEED = 0.001
 const VEL_KAPPA = 0.5
-const VEL_RANDOM_CHANCE = 0.01
-const VEL_RANDOM_MAXPOWER = 1
+let VEL_RANDOM_CHANCE = 0.01
+let VEL_RANDOM_MAXPOWER = 1
 let DEBUG = false
 
 let searchVecs
 
 let img
+
+function setScale(value) {
+  let p = lerp(6, 1, value/100.0)
+  SCALE = Math.pow(10, -p)
+  console.log({value, p, SCALE})
+}
 
 
 class UnitVector {
@@ -63,11 +69,10 @@ class Grid {
   }
   scaleAll(v) {
     for (let i = 0; i < this.ncells; ++i) {
-      if (this.cells[i] < SCALE_THRESH) {
-        this.cells[i] = 0
-        continue
+      const val = this.cells[i];
+      if (val > SCALE_THRESH) {
+        this.cells[i] *= v
       }
-      this.cells[i] *= v
     }
   }
   diffuse(v) {
