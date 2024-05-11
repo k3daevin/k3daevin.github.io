@@ -1,15 +1,14 @@
 const X = 800
 const Y = 800
-let DIFF = 0.01
-const DIFF_THRESH = 1e-4 //alles da drunter wird nicht mehr diffundiert
-let SCALE = 0.001
+let DIFF = 1e-2
+let SCALE = 1e-2
 const SCALE_THRESH = 1e-6 //alles da drunter wird auf 0 gesetzt
 const N_AGENTS = 10000
 const AGENT_SIZE = 5
 let AGENT_SPEED = 1e-3
 let AGENT_TURNANGLE = 3.1415/2 //halbe Spannweite
 let SEARCH_DIST = 2e-2
-let SEARCH_ANGLE = 3.1415/8 //halbe Spanweite
+let SEARCH_ANGLE = 3.1415/4 //halbe Spanweite
 let VEL_RANDOM_CHANCE = 0.01
 let VEL_RANDOM_MAXPOWER = 3.1415/3
 let DEBUG = false
@@ -42,6 +41,11 @@ function setVelRandomChance(value) {
   console.log({value, p, VEL_RANDOM_CHANCE})
 }
 
+function setDiff(value) {
+  const p = lerp(6, 1, value/100.0)
+  DIFF = Math.pow(10, -p)
+  console.log({value, p, DIFF})
+}
 
 class UnitVector {
   constructor(v) {
@@ -63,22 +67,24 @@ class UnitVector {
 }
 
 class Grid {
+  static dirs4 = [[1,0], [0,1], [-1,0], [0,-1]] //d.h. x:0,1 y:2,3
   constructor(nx, ny) {
     this.nx = nx
     this.ny = ny
     this.ncells = nx * ny
-    this.cells = new Array(this.ncells)
-    this.neighbours = new Array(this.ncells)
+    this.cells = new Float64Array(this.ncells)
+    this.tmpCells = new Float64Array(this.ncells)
+    this.neighbours = new Int32Array(this.ncells * 4)
     for (let i = 0; i < this.ncells; ++i) {
       const ci = this.getCellCoordsByIndex(i)
-      let localNeighbours = []
-      for (let [u,v] of [[1,0], [0,1], [-1,0], [0,-1]]) {
+      let j = 0;
+      for (let [u,v] of Grid.dirs4) {
         let nci = {ix: ci.ix + u, iy: ci.iy + v}
         let wnci = this.warpCellCoords(nci)
         let ni = this.getIndexByCellCoords(wnci)
-        localNeighbours.push(ni)
+        this.neighbours[i * 4 + j] = ni
+        j++
       }
-      this.neighbours[i] = localNeighbours
     }
     
   }
@@ -96,23 +102,35 @@ class Grid {
     }
   }
   diffuse(v) {
-    const oldCells = this.cells.slice(0)
+    const neighbours = this.neighbours
+    const cells1 = this.cells
+    const cells2 = this.tmpCells
+    const DIFF0_25 = 0.25 * DIFF
+    const DIFF1m0_5 = 1 - 0.5*DIFF
+    //diffuse in x-dir from cells1 to cells2
     for (let i = 0; i < this.ncells; ++i) {
-      const val = oldCells[i]
-      if (val < DIFF_THRESH) continue
-      const inc = val/4*v
-      const neighbours = this.neighbours[i]
-      for (let j = 0; j < 4; ++j) {
-        this.cells[neighbours[j]] += inc
-      }
-      // for (let ni of this.neighbours[i]) {
-      //   this.cells[ni] += inc
-      // }
-      this.cells[i] = (1-v)*val
+      const i4 = i*4
+      const leftVal = cells1[neighbours[i4]]
+      const val = cells1[i]
+      const rightVal = cells1[neighbours[i4+1]]
+
+      const newVal = DIFF0_25 * (leftVal + rightVal) + DIFF1m0_5 * val
+      cells2[i] = newVal
+    }
+    //diffuse in y-dir from cells2 to cells1
+    for (let i = 0; i < this.ncells; ++i) {
+      const i4 = i*4
+      const topVal = cells2[neighbours[i4+2]]
+      const val = cells2[i]
+      const bottomVal = cells2[neighbours[i4+3]]
+
+      const newVal = DIFF0_25 * (topVal + bottomVal) + DIFF1m0_5 * val
+      cells1[i] = newVal
     }
   }
+
   getCellCoordsByIndex(i) { return {ix: i % this.nx, iy: i / this.ny} }
-  warpCellCoords(ci) { return {ix: Math.round((ci.ix + this.nx) % this.nx), iy: Math.round((ci.iy + this.ny) % this.ny) }}
+  warpCellCoords(ci) { return {ix: Math.floor((ci.ix + this.nx) % this.nx), iy: Math.floor((ci.iy + this.ny) % this.ny) }}
   getIndexByCellCoords(ci) { return ci.ix + ci.iy * this.nx}
   getByCellIndex(i) { return this.cells[i] }
   getByCellCoords(ix, iy) { return this.cells[ix + iy * this.nx] }
@@ -214,6 +232,7 @@ class Agent {
     for (let i = 0; i < dirs.length; ++i) {
       const dir = dirs[i]
       const searchUnitVector = new UnitVector(dir.copy().add(this.pos))
+      searchUnitVector.wrap()
       const ci = grid.getCellIndexByUnitCoords(searchUnitVector)
       const val = grid.getByCellIndex(ci)
       if (val >= maxVal) {
@@ -270,6 +289,7 @@ let grid
 
 function setup() {
   createCanvas(X, Y)
+  frameRate(60)
   grid = new Grid(X, Y)
   img = createImage(X, Y)
   grid.initAll(0)
@@ -284,32 +304,59 @@ function setup() {
 }
 
 function draw() {
+  // grid.initAll(0)
+  
+  // const coords = {ix: Math.floor(mouseX), iy: Math.floor(mouseY)}
+  // const ci = grid.getIndexByCellCoords(coords)
+  // console.log(ci)
+  // const neighbours = grid.neighbours[ci]
+  // if (!neighbours) {
+  //   return
+  // }
+  // grid.cells[ci] = 1
+  // for (const neighbour of neighbours) {
+  //   grid.cells[neighbour] = 1
+  // }
+
+  // img.loadPixels()
+  // let pixels = img.pixels
+  // for (let i = 0; i < grid.ncells; ++i) {
+  //   const val = Math.floor(grid.cells[i] * 255)
+  //   const [r, g, b, a] = [val, val, val, 255]
+  //   const pi = i*4
+  //   pixels[pi + 0] = r
+  //   pixels[pi + 1] = g
+  //   pixels[pi + 2] = b
+  //   pixels[pi + 3] = a
+  // }
+  // img.updatePixels()
+
+  // image(img, 0, 0)
+
+
+  // return;
   grid.diffuse(DIFF)
   grid.scaleAll(1-SCALE)
 
   img.loadPixels()
-  let pixels = img.pixels
+  const pixels = img.pixels
   for (let i = 0; i < grid.ncells; ++i) {
     const val = Math.floor(grid.cells[i] * 255)
-    const [r, g, b, a] = [val, val, val, 255]
+    //const [r, g, b, a] = [val, val, val, 255]
     const pi = i*4
-    pixels[pi + 0] = r
-    pixels[pi + 1] = g
-    pixels[pi + 2] = b
-    pixels[pi + 3] = a
+    pixels[pi + 0] = val
+    pixels[pi + 1] = val
+    pixels[pi + 2] = val
+    pixels[pi + 3] = 255
   }
   img.updatePixels()
 
   image(img, 0, 0)
 
   color(255, 0, 0, 100)
-  //loadPixels()
-  //const d = pixelDensity()
   for (const agent of agents) {
-    //agent.updateVel(pixels, d)
     agent.updateVelByGrid(grid)
   }
-  //updatePixels()
 
   color(255, 100)
   for (const agent of agents) {
@@ -317,4 +364,9 @@ function draw() {
     agent.draw(grid)
   }
 
+
+
+  stroke(255, 0, 0, 255)
+  textSize(50)
+  text(Math.round(frameRate()), 10, 50)
 }
