@@ -15,6 +15,12 @@
   <body>
     <script src="sketch.js"></script>
     <input id="scale" type="range" min="0" max="100" value="60" class="slider" onchange="setScale(this.value);">
-    <label for="scale">Evaporierung</label>
+    <label for="scale">Evaporierung</label><br />
+    <input id="scale" type="range" min="0" max="100" value="70" class="slider" onchange="setAgentTurnangle(this.value);">
+    <label for="scale">Agent.Drehwinkel</label><br />
+    <input id="scale" type="range" min="0" max="100" value="50" class="slider" onchange="setSearchAngle(this.value);">
+    <label for="scale">Suchwinkel</label><br />
+    <input id="scale" type="range" min="0" max="100" value="60" class="slider" onchange="setVelRandomChance(this.value);">
+    <label for="scale">ZufallsdreherChance</label><br />
   </body>
 </html>

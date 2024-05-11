@@ -6,10 +6,12 @@ let SCALE = 0.001
 const SCALE_THRESH = 1e-6 //alles da drunter wird auf 0 gesetzt
 const N_AGENTS = 10000
 const AGENT_SIZE = 5
-const AGENT_SPEED = 0.001
-const VEL_KAPPA = 0.5
+let AGENT_SPEED = 1e-3
+let AGENT_TURNANGLE = 3.1415/2 //halbe Spannweite
+let SEARCH_DIST = 2e-2
+let SEARCH_ANGLE = 3.1415/8 //halbe Spanweite
 let VEL_RANDOM_CHANCE = 0.01
-let VEL_RANDOM_MAXPOWER = 1
+let VEL_RANDOM_MAXPOWER = 3.1415/3
 let DEBUG = false
 
 let searchVecs
@@ -17,9 +19,27 @@ let searchVecs
 let img
 
 function setScale(value) {
-  let p = lerp(6, 1, value/100.0)
+  const p = lerp(6, 1, value/100.0)
   SCALE = Math.pow(10, -p)
   console.log({value, p, SCALE})
+}
+
+function setAgentTurnangle(value) {
+  const d = lerp(16, 1, value/100.0)
+  AGENT_TURNANGLE = PI/d
+  console.log({value, d, AGENT_TURNANGLE})
+}
+
+function setSearchAngle(value) {
+  const d = lerp(16, 1, value/100.0)
+  SEARCH_ANGLE = PI/d
+  console.log({value, d, SEARCH_ANGLE})
+}
+
+function setVelRandomChance(value) {
+  const p = lerp(3, 0.9, value/100.0)
+  VEL_RANDOM_CHANCE = Math.pow(10, -p)
+  console.log({value, p, VEL_RANDOM_CHANCE})
 }
 
 
@@ -177,6 +197,41 @@ class Agent {
   }
 
   updateVelByGrid(grid) {
+    if (random() < VEL_RANDOM_CHANCE) {
+      const maxpower = random(VEL_RANDOM_MAXPOWER)
+      this.vel.rotate(random(-maxpower,maxpower))
+      return
+    }
+
+    const dir0 = this.vel.copy().setMag(SEARCH_DIST)
+    const dirs = [
+      dir0,
+      dir0.copy().rotate(SEARCH_ANGLE),
+      dir0.copy().rotate(-SEARCH_ANGLE),
+    ]
+    let maxIndex = 0
+    let maxVal = -1
+    for (let i = 0; i < dirs.length; ++i) {
+      const dir = dirs[i]
+      const searchUnitVector = new UnitVector(dir.copy().add(this.pos))
+      const ci = grid.getCellIndexByUnitCoords(searchUnitVector)
+      const val = grid.getByCellIndex(ci)
+      if (val >= maxVal) {
+        maxVal = val
+        maxIndex = i
+      }
+    }
+
+    let desiredDeltaAngle = 0
+    if (maxIndex == 1) {
+      desiredDeltaAngle = AGENT_TURNANGLE
+    } else if (maxIndex == 2) {
+      desiredDeltaAngle = -AGENT_TURNANGLE
+    }
+    this.vel.rotate(desiredDeltaAngle)
+  }
+
+  updateVelByGrid_old(grid) {
     const angle = searchVecs[0].angleBetween(this.vel)
     const mySearchVecs = searchVecs.map(function(x) {
       const y = x.copy()
@@ -218,22 +273,6 @@ function setup() {
   grid = new Grid(X, Y)
   img = createImage(X, Y)
   grid.initAll(0)
-  unit10 = createVector(1, 0)
-  searchVecs = [
-    createVector(0.02, 0),
-    createVector(0.015, 0.005),
-    createVector(0.015, -0.005)
-  ]
-  scanVecs =  [
-    createVector(-1, -1),
-    createVector(-1, 0),
-    createVector(-1, 1),
-    createVector(0, -1),
-    createVector(0, 1),
-    createVector(1, -1),
-    createVector(1, 0),
-    createVector(1, 1),
-  ]
   agents = new Array(N_AGENTS)
   for (let i = 0; i < N_AGENTS; ++i) {
     let vel = createVector(AGENT_SPEED, 0)
