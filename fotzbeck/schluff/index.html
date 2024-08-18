@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Legende</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #f5f5f5;
+        }
+
+        .legend {
+            background-color: #ffffff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            max-width: 300px;
+        }
+
+        .legend-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .legend-item span {
+            margin-left: 15px;
+            font-size: 18px;
+            flex-grow: 1;
+        }
+
+        .legend-circle-container {
+            display: flex;
+            width: 60px; /* Einheitliche Breite für den Kreisbereich */
+            justify-content: center;
+        }
+
+        .legend-circle {
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            border: 1px solid black; /* Schwarzer Rand */
+        }
+
+        .sativa {
+            background-color: green;
+        }
+
+        .indica {
+            background-color: blue;
+        }
+
+        .cbd {
+            background-color: yellow; /* Dunkleres Gelb */
+        }
+
+        .hybrid {
+            display: flex;
+        }
+
+        .hybrid .legend-circle {
+            margin-right: 2px;
+            margin-left: 2px;
+        }
+
+        .legend-item:last-child {
+            margin-bottom: 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="legend">
+        <div class="legend-item">
+            <div class="legend-circle-container">
+                <div class="legend-circle sativa"></div>
+            </div>
+            <span>Sativa</span>
+        </div>
+        <div class="legend-item">
+            <div class="legend-circle-container">
+                <div class="legend-circle indica"></div>
+            </div>
+            <span>Indica</span>
+        </div>
+        <div class="legend-item">
+            <div class="legend-circle-container">
+                <div class="legend-circle cbd"></div>
+            </div>
+            <span>CBD</span>
+        </div>
+        <div class="legend-item">
+            <div class="legend-circle-container hybrid">
+                <div class="legend-circle sativa"></div>
+                <div class="legend-circle indica"></div>
+            </div>
+            <span>Hybrid</span>
+        </div>
+    </div>
+</body>
+</html>
