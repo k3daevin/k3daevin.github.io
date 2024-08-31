@@ -3,16 +3,35 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Vue.js Legende mit Information</title>
+    <title>Schluff & Co.</title>
     <style>
         body {
             font-family: Arial, sans-serif;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
             margin: 0;
+            padding: 0;
             background-color: #f5f5f5;
+        }
+
+        nav {
+            background-color: #333;
+            padding: 10px;
+            text-align: center;
+        }
+
+        nav a {
+            color: #fff;
+            margin: 0 15px;
+            text-decoration: none;
+            font-size: 18px;
+        }
+
+        nav a.router-link-exact-active {
+            font-weight: bold;
+            border-bottom: 2px solid #fff;
+        }
+
+        #app {
+            padding: 20px;
         }
 
         .legend {
@@ -20,7 +39,8 @@
             padding: 20px;
             border-radius: 8px;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-            max-width: 300px;
+            max-width: 250px;
+            margin: 0 auto;
         }
 
         .legend-item {
@@ -62,7 +82,6 @@
             align-items: center;
             margin-left: 10px;
         }
-
         /* Modaler Dialog */
         .modal {
             display: flex;
@@ -118,73 +137,79 @@
 </head>
 <body>
     <div id="app">
-        <div v-if="showLegend" class="legend">
-            <div v-for="item in legendItems" :key="item.name" class="legend-item">
-                <div class="legend-circle-container">
-                    <div v-for="color in item.colors" :key="color" :style="{ backgroundColor: color }" class="legend-circle"></div>
-                </div>
-                <span>{{ item.name }}</span>
-                <div class="info-icon" @click="openModal(item)">i</div>
-            </div>
-        </div>
-        <div v-else>
-            <object type="image/svg+xml" data="SundB-Workflow.drawio.svg">
-                Your browser does not support SVG
-            </object>
-        </div>
-
-        <!-- Modaler Dialog -->
-        <div v-if="showModal" class="modal" @click.self="closeModal">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <span class="close" @click="closeModal">&times;</span>
-                </div>
-                <div class="modal-body">
-                    <h3>{{ selectedItem.name }}</h3>
-                    <div class="modal-circle-container">
-                        <div v-for="color in selectedItem.colors" :key="color" :style="{ backgroundColor: color }" class="modal-circle"></div>
-                    </div>
-                    <p>{{ selectedItem.information }}</p>
-                </div>
-            </div>
-        </div>
+        <nav>
+            <router-link to="/legende">Legende</router-link>
+            <router-link to="/ablauf">Ablauf</router-link>
+        </nav>
+        <router-view></router-view>
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/vue@2"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vue-router@3"></script>
     <script>
-        const COLOR = {
-            green: 'green',
-            blue: 'blue',
-            yellow: '#FFD700' // Dunkleres Gelb
-        };
-        new Vue({
-            el: '#app',
-            data: {
-                showModal: false,
-                showLegend: true,
-                selectedItem: null,
-                legendItems: [
-                    { 
-                        name: 'Sativa', 
-                        colors: [COLOR.green], 
-                        information: 'Mehr als 66,6% Sativa-Anteil in der Genetik (ohne Ruderalis) und <1% CBD Wirkstoffgehalt.'
-                    },
-                    { 
-                        name: 'Indica', 
-                        colors: [COLOR.blue], 
-                        information: 'Mehr als 66,6% Indica-Anteil in der Genetik (ohne Ruderalis) und <1% CBD Wirkstoffgehalt.'
-                    },
-                    { 
-                        name: 'CBD', 
-                        colors: [COLOR.yellow],
-                        information: 'Weniger als 0,x% THC und signifikanter CBD-Anteil.'
-                    },
-                    { 
-                        name: 'Hybrid', 
-                        colors: [COLOR.green, COLOR.blue], 
-                        information: 'Sativa/Indica-Anteil zwischen 33,3% und 66,6% in der Genetik (ohne Ruderalis) und <1% CBD Wirkstoffgehalt.'
-                    }
-                ]
+        // Legende-Komponente
+        const LegendComponent = {
+            template: `
+                <div>
+                    <div class="legend">
+                        <div v-for="item in legendItems" :key="item.name" class="legend-item">
+                            <div class="legend-circle-container">
+                                <div v-for="color in item.colors" :key="color" :style="{ backgroundColor: color }" class="legend-circle"></div>
+                            </div>
+                            <span>{{ item.name }}</span>
+                            <div class="info-icon" @click="openModal(item)">i</div>
+                        </div>
+                    </div>
+
+                    <!-- Modaler Dialog -->
+                    <div v-if="showModal" class="modal" @click.self="closeModal">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h3>{{ selectedItem.name }}</h3>
+                                <span class="close" @click="closeModal">&times;</span>
+                            </div>
+                            <div class="modal-body">
+                                <div class="modal-circle-container">
+                                    <div v-for="color in selectedItem.colors" :key="color" :style="{ backgroundColor: color }" class="modal-circle"></div>
+                                </div>
+                                <p>{{ selectedItem.information }}</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `,
+            data() {
+                const COLOR = {
+                    green: 'green',
+                    blue: 'blue',
+                    yellow: '#FFD700' // Dunkleres Gelb
+                };
+                return {
+                    showModal: false,
+                    selectedItem: null,
+                    legendItems: [
+                        { 
+                            name: 'Sativa', 
+                            colors: [COLOR.green], 
+                            information: 'Mehr als 66,6% Sativa-Anteil in der Genetik (ohne Ruderalis) und <1% CBD Wirkstoffgehalt.'
+                        },
+                        { 
+                            name: 'Indica', 
+                            colors: [COLOR.blue], 
+                            information: 'Mehr als 66,6% Indica-Anteil in der Genetik (ohne Ruderalis) und <1% CBD Wirkstoffgehalt.'
+                        },
+                        { 
+                            name: 'CBD', 
+                            colors: [COLOR.yellow],
+                            information: 'Weniger als 0,x% THC und signifikanter CBD-Anteil.'
+                        },
+                        { 
+                            name: 'Hybrid', 
+                            colors: [COLOR.green, COLOR.blue], 
+                            information: 'Sativa/Indica-Anteil zwischen 33,3% und 66,6% in der Genetik (ohne Ruderalis) und <1% CBD Wirkstoffgehalt.'
+                        }
+                    ]
+                };
             },
             methods: {
                 openModal(item) {
@@ -193,11 +218,36 @@
                 },
                 closeModal() {
                     this.showModal = false;
-                },
-                toggleLegend() {
-                    this.showLegend = !this.showLegend;
                 }
             }
+        };
+
+        // Ablauf-Komponente
+        const AblaufComponent = {
+            template: `
+                <div class="ablauf">
+                    <h2>Ablauf</h2>
+                    <object data="SundB-Workflow.drawio.svg" type="image/svg+xml" width="100%" height="auto"></object>
+                </div>
+            `
+        };
+
+        // Router-Konfiguration
+        const routes = [
+            { path: '/legende', component: LegendComponent },
+            { path: '/ablauf', component: AblaufComponent },
+            { path: '*', redirect: '/legende' }  // Fallback auf Legende, wenn kein passender Pfad gefunden wird
+        ];
+
+        const router = new VueRouter({
+            routes,
+            mode: 'hash'
+        });
+
+        // Haupt-Vue-Instanz
+        new Vue({
+            el: '#app',
+            router
         });
     </script>
 </body>
