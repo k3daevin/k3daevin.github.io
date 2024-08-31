@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Legende</title>
+    <title>Vue.js Legende mit Information</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -37,7 +37,7 @@
 
         .legend-circle-container {
             display: flex;
-            width: 60px; /* Einheitliche Breite für den Kreisbereich */
+            width: 100px; /* Einheitliche Breite für den Kreisbereich */
             justify-content: center;
         }
 
@@ -45,62 +45,160 @@
             width: 20px;
             height: 20px;
             border-radius: 50%;
-            border: 1px solid black; /* Schwarzer Rand */
+            border: 2px solid black; /* Schwarzer Rand */
+            margin-right: 5px;
         }
 
-        .sativa {
-            background-color: green;
-        }
-
-        .indica {
-            background-color: blue;
-        }
-
-        .cbd {
-            background-color: yellow; /* Dunkleres Gelb */
-        }
-
-        .hybrid {
+        .info-icon {
+            cursor: pointer;
+            font-size: 18px;
+            font-weight: bold;
+            border: 2px solid black;
+            border-radius: 50%;
+            width: 20px;
+            height: 20px;
             display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-left: 10px;
         }
 
-        .hybrid .legend-circle {
-            margin-right: 2px;
-            margin-left: 2px;
+        /* Modaler Dialog */
+        .modal {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 1000;
         }
 
-        .legend-item:last-child {
-            margin-bottom: 0;
+        .modal-content {
+            background-color: #ffffff;
+            padding: 20px;
+            border-radius: 8px;
+            max-width: 400px;
+            text-align: center;
         }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .close {
+            cursor: pointer;
+            font-size: 18px;
+        }
+
+        .modal-body {
+            margin-top: 10px;
+        }
+
+        .modal-circle-container {
+            display: flex;
+            justify-content: center;
+            margin-top: 10px;
+        }
+
+        .modal-circle {
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            border: 2px solid black;
+            margin-right: 5px;
+        }
+
     </style>
 </head>
 <body>
-    <div class="legend">
-        <div class="legend-item">
-            <div class="legend-circle-container">
-                <div class="legend-circle sativa"></div>
+    <div id="app">
+        <div v-if="showLegend" class="legend">
+            <div v-for="item in legendItems" :key="item.name" class="legend-item">
+                <div class="legend-circle-container">
+                    <div v-for="color in item.colors" :key="color" :style="{ backgroundColor: color }" class="legend-circle"></div>
+                </div>
+                <span>{{ item.name }}</span>
+                <div class="info-icon" @click="openModal(item)">i</div>
             </div>
-            <span>Sativa</span>
         </div>
-        <div class="legend-item">
-            <div class="legend-circle-container">
-                <div class="legend-circle indica"></div>
-            </div>
-            <span>Indica</span>
+        <div v-else>
+            <object type="image/svg+xml" data="SundB-Workflow.drawio.svg">
+                Your browser does not support SVG
+            </object>
         </div>
-        <div class="legend-item">
-            <div class="legend-circle-container">
-                <div class="legend-circle cbd"></div>
+
+        <!-- Modaler Dialog -->
+        <div v-if="showModal" class="modal" @click.self="closeModal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <span class="close" @click="closeModal">&times;</span>
+                </div>
+                <div class="modal-body">
+                    <h3>{{ selectedItem.name }}</h3>
+                    <div class="modal-circle-container">
+                        <div v-for="color in selectedItem.colors" :key="color" :style="{ backgroundColor: color }" class="modal-circle"></div>
+                    </div>
+                    <p>{{ selectedItem.information }}</p>
+                </div>
             </div>
-            <span>CBD</span>
-        </div>
-        <div class="legend-item">
-            <div class="legend-circle-container hybrid">
-                <div class="legend-circle sativa"></div>
-                <div class="legend-circle indica"></div>
-            </div>
-            <span>Hybrid</span>
         </div>
     </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/vue@2"></script>
+    <script>
+        const COLOR = {
+            green: 'green',
+            blue: 'blue',
+            yellow: '#FFD700' // Dunkleres Gelb
+        };
+        new Vue({
+            el: '#app',
+            data: {
+                showModal: false,
+                showLegend: true,
+                selectedItem: null,
+                legendItems: [
+                    { 
+                        name: 'Sativa', 
+                        colors: [COLOR.green], 
+                        information: 'Mehr als 66,6% Sativa-Anteil in der Genetik (ohne Ruderalis) und <1% CBD Wirkstoffgehalt.'
+                    },
+                    { 
+                        name: 'Indica', 
+                        colors: [COLOR.blue], 
+                        information: 'Mehr als 66,6% Indica-Anteil in der Genetik (ohne Ruderalis) und <1% CBD Wirkstoffgehalt.'
+                    },
+                    { 
+                        name: 'CBD', 
+                        colors: [COLOR.yellow],
+                        information: 'Weniger als 0,x% THC und signifikanter CBD-Anteil.'
+                    },
+                    { 
+                        name: 'Hybrid', 
+                        colors: [COLOR.green, COLOR.blue], 
+                        information: 'Sativa/Indica-Anteil zwischen 33,3% und 66,6% in der Genetik (ohne Ruderalis) und <1% CBD Wirkstoffgehalt.'
+                    }
+                ]
+            },
+            methods: {
+                openModal(item) {
+                    this.selectedItem = item;
+                    this.showModal = true;
+                },
+                closeModal() {
+                    this.showModal = false;
+                },
+                toggleLegend() {
+                    this.showLegend = !this.showLegend;
+                }
+            }
+        });
+    </script>
 </body>
 </html>
