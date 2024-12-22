@@ -63,7 +63,13 @@ function mousePressed() {
 }
 
 function setup() {
-  createCanvas(X, Y)
+  let win = window,
+  doc = document,
+  docElem = doc.documentElement,
+  body = doc.getElementsByTagName('body')[0],
+  cX = win.innerWidth || docElem.clientWidth || body.clientWidth,
+  cY = win.innerHeight|| docElem.clientHeight|| body.clientHeight;
+  createCanvas(cX, cY)
 
   knoepfe = [
     {x: 250, y: 700, c: color(0, 153, 51), active: () => true, monsterDelta: -5, levelDelta: 1},
@@ -87,7 +93,14 @@ function draw() {
   monster.x += speed
 
   //Monster bissle zittern lassen
-  const jitterThreshold = map(monster.y + monster.h / 2, wand.y, wand.y + wand.h, 0., 1., true)
+  const jitterThreshold = map(
+    monster.y + monster.h / 2,
+    wand.y,
+    wand.y + wand.h,
+    0.,
+    1.,
+    true
+  )
   if (random() > jitterThreshold) {
     monster.y += 1
   } else {
