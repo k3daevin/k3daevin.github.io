@@ -28,8 +28,8 @@
       },
       template: `
         <div class="grid">
-          <template v-for="(row, rowIndex) in matrix" :key="rowIndex">
-            <span v-for="(cell, colIndex) in row" :key="colIndex" class="cell" @click="toggle(rowIndex, colIndex)">{{ cell }}</span>
+          <template v-for="(row, rowIndex) in 8" :key="rowIndex">
+            <span v-for="(col, colIndex) in 8" :key="colIndex" class="cell" @mousedown="toggle(rowIndex, colIndex)" @touchstart.prevent="toggle(rowIndex, colIndex)">{{ matrix[rowIndex][colIndex] }}</span>
           </template>
         </div>
       `
