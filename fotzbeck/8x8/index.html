@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8" />
+  <title>8x8 Matrix Toggle</title>
+  <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+  <style>
+    body { display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; background-color: #121212; }
+    .grid { display: grid; grid-template-columns: repeat(8, 40px); gap: 5px; border: 4px solid #444; padding: 10px; border-radius: 12px; }
+    .cell { font-size: 32px; cursor: pointer; user-select: none; }
+  </style>
+</head>
+<body>
+  <div id="app"></div>
+
+  <script>
+    const { createApp, ref } = Vue;
+
+    createApp({
+      setup() {
+        const matrix = ref(Array.from({ length: 8 }, () => Array(8).fill('⚫')));
+
+        function toggle(row, col) {
+          matrix.value[row][col] = matrix.value[row][col] === '⚫' ? '🔴' : '⚫';
+        }
+
+        return { matrix, toggle };
+      },
+      template: `
+        <div class="grid">
+          <template v-for="(row, rowIndex) in matrix" :key="rowIndex">
+            <span v-for="(cell, colIndex) in row" :key="colIndex" class="cell" @click="toggle(rowIndex, colIndex)">{{ cell }}</span>
+          </template>
+        </div>
+      `
+    }).mount('#app');
+  </script>
+</body>
+</html>
