@@ -1,10 +1,70 @@
 <!DOCTYPE html>
-<html>
+<html lang="de">
 <head>
-    <meta charset="UTF-8" />
-    <title>Furzarsch</title>
+  <meta charset="UTF-8" />
+  <title>Sound Player</title>
+  <script src="https://unpkg.com/vue@3/dist/vue.global.prod.js"></script>
+  <style>
+    body {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+      background-color: #121212;
+      color: #fff;
+      font-family: Arial, sans-serif;
+    }
+    .container {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1rem;
+      max-width: 70%;
+      justify-content: center;
+    }
+    button {
+      background: #1e1e1e;
+      color: #fff;
+      border: 2px solid #444;
+      border-radius: 8px;
+      padding: 0.8rem 1.5rem;
+      cursor: pointer;
+      transition: background 0.3s;
+    }
+    button:hover {
+      background: #333;
+    }
+  </style>
 </head>
 <body>
-    Herzlich willkommen auf furzarsch.de
+  <div id="app" class="container">
+    <button v-for="sound in sounds" :key="sound" @click="playSound(sound)">{{ sound }}</button>
+  </div>
+
+  <script>
+    const app = Vue.createApp({
+      data() {
+        return {
+          sounds: [
+            'Baumstamm.mp3',
+            'Brap-hoch-dirty.mp3',
+            'Brapbrap-braaaaraaaa.mp3',
+            'Diid-Dööd.mp3',
+            'Dosenfurz.mp3',
+            'Kletschifurz.mp3',
+            'Kurz-kurz-langgeschlaxkert.mp3',
+            'Quetschi-Gwarbl.mp3'
+          ]
+        };
+      },
+      methods: {
+        playSound(sound) {
+          new Audio(`/sound/${sound}`).play();
+        }
+      }
+    });
+
+    app.mount('#app');
+  </script>
 </body>
 </html>
