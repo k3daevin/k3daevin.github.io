@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8" />
+  <title>Mendel F1 Hybrid</title>
+  <script src="https://unpkg.com/vue@3/dist/vue.global.prod.js"></script>
+  <style>
+    table {
+      border-collapse: collapse;
+    }
+    td {
+      border: 1px solid #333;
+      padding: 0.5rem;
+      text-align: center;
+      width: 3rem;
+      height: 3rem;
+    }
+    .color-box {
+      width: 100%;
+      height: 100%;
+      display: block;
+    }
+  </style>
+</head>
+<body>
+  <div id="app">
+    <h1>Anzahl {{ n }}</h1>
+    <table>
+      <tr v-for="i in rows" :key="i">
+        <td v-for="j in cols" :key="j">
+          {{ cellContent(i-1, j-1) }} <br>
+          <div
+          v-if="i !== 1 && j !== 1"
+          class="color-box"
+          :style="{ backgroundColor: grayColor(i-1, j-1) }"
+          :title="cellContent(i-1, j-1)"
+        ></div>
+        </td>
+      </tr>
+    </table>
+    <button @click="incN">Erhöhe</button>
+    <button @click="decN">Erniedrige</button>
+  </div>
+  <script>
+    const { createApp, ref, computed } = Vue;
+
+    createApp({
+      setup() {
+        const n = ref(2)
+        const rows = computed(() => 1 + 2 ** n.value);
+        const cols = ref(rows);
+
+        const cellContent = (i, j) => {
+            const A = x => String.fromCharCode(64 + x); //1->A, 2->B
+            const a = x => String.fromCharCode(96 + x); //1->a, 2->b
+
+
+            if (i > j) {
+                [i, j] = [j, i];
+            }
+          
+            if (i == 0) {
+                if (j == 0) {
+                    return "";
+                }
+                j--;
+                let s = "";
+                for (let k = 1; k <= n.value; ++k) {
+                    const bit = j & 1;
+                    if (bit == 0) 
+                        s += A(k);
+                    else
+                        s += a(k);
+                    j >>= 1;
+                }
+                return s;
+            }
+
+            i--;
+            j--;
+            let s = "";
+            for (let k = 1; k <= n.value; ++k) {
+                const ibit = i & 1;
+                i >>= 1;
+                const jbit = j & 1;
+                j >>= 1;
+                switch(ibit + jbit) {
+                    case 0:
+                        s += A(k) + A(k);
+                        break;
+                    case 1:
+                        s += A(k) + a(k);
+                        break;
+                    case 2:
+                        s += a(k) + a(k);
+                        break;
+                }
+            }
+
+            return s;
+
+            // Beispiel: Summe der Koordinaten
+            return i + j;
+        };
+
+        const simpleColor = (i, j) => {
+            const maxValue = 2 ** (2 * n.value);
+            const genotyp = cellContent(i, j);
+            let v = 0;
+            for (let x of genotyp) {
+                if (x.charCodeAt(0) >= 97) {
+                    v++;
+                }
+                v <<= 1;
+            }
+            const value_latent = v >> 1;
+            const value_normal = value_latent / maxValue;
+            return value_normal;
+        }
+
+        const grayColor = (i, j) => {
+          const value = simpleColor(i, j);
+          const gray = Math.round(value * 255);
+          return `rgb(${gray}, ${gray}, ${gray})`;
+        };
+
+        const rgbColor = (i, j) => {
+            const value = simpleColor(i, j); // 0..1
+            const hue = value * 360; // Farbumfang (HSL)
+            // HSL -> RGB (einfacher Browser-String)
+            return `hsl(${hue}, 100%, 50%)`;
+        };
+
+
+        const incN = () => {
+            n.value++;
+        }
+        const decN = () => {
+            if (n.value <= 1) return;
+            n.value--;
+        }
+
+        return { n, rows, cols, cellContent, incN, decN, simpleColor, grayColor, rgbColor };
+      }
+    }).mount('#app');
+  </script>
+</body>
+</html>
