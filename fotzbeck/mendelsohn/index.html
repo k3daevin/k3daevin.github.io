@@ -27,6 +27,10 @@
     <h1>Anzahl Gene: {{ n }}</h1>
     <h2>F1 Hybrid Selbstung</h2>
     <p>{{ f1HybridString() }} &#215; {{ f1HybridString() }}</p>
+    <div>
+        <button @click="showGenotype">Genotyp</button>        
+        <button @click="showPhenotype">Phänotyp</button>        
+    </div>
     <table>
       <tr v-for="i in rows" :key="i">
         <td v-for="j in cols" :key="j">
@@ -51,6 +55,11 @@
         const n = ref(1)
         const rows = computed(() => 1 + 2 ** n.value);
         const cols = ref(rows);
+
+        const PHENOTYPE = 1
+        const GENOTYPE = 2
+
+        const showtype = ref(GENOTYPE)
 
         const A = x => String.fromCharCode(64 + x); //1->A, 2->B
         const a = x => String.fromCharCode(96 + x); //1->a, 2->b
@@ -114,7 +123,7 @@
             return i + j;
         };
 
-        const simpleColor = (i, j) => {
+        const getColorGenotyp = (i, j) => {
             const maxValue = 2 ** (2 * n.value);
             const genotyp = cellContent(i, j);
             let v = 0;
@@ -129,14 +138,40 @@
             return value_normal;
         }
 
+        const getColorPhenotyp = (i, j) => {
+            const maxValue = 2 ** n.value;
+            const genotyp = cellContent(i, j);
+            let v = 0;
+            for (let i = 0; i < genotyp.length; i += 2) {
+                if (genotyp.charCodeAt(i) < 97 ||
+                    genotyp.charCodeAt(i + 1) < 97) {
+                    v++;
+                }
+                v <<= 1;                
+            }
+
+            const value_latent = v >> 1;
+            const value_normal = value_latent / maxValue;
+            return value_normal;
+        }
+
+        const getColor = (i, j) => {
+            switch(showtype.value) {
+                case GENOTYPE:
+                    return getColorGenotyp(i, j);
+                case PHENOTYPE:
+                    return getColorPhenotyp(i, j);
+            }
+        }
+
         const grayColor = (i, j) => {
-          const value = simpleColor(i, j);
+          const value = getColor(i, j);
           const gray = Math.round(value * 255);
           return `rgb(${gray}, ${gray}, ${gray})`;
         };
 
         const rgbColor = (i, j) => {
-            const value = simpleColor(i, j); // 0..1
+            const value = getColor(i, j); // 0..1
             const scaled = value * 6;        // 0..6 für 6 Abschnitte
             const section = Math.floor(scaled);
             const t = scaled - section;      // Interpolation in Abschnitt
@@ -165,7 +200,20 @@
             n.value--;
         }
 
-        return { n, rows, cols, cellContent, incN, decN, simpleColor, grayColor, rgbColor, f1HybridString };
+        const showGenotype = () => {
+            showtype.value = GENOTYPE;
+        }
+
+        const showPhenotype = () => {
+            showtype.value = PHENOTYPE;
+        }
+
+        return {
+            n, rows, cols, 
+            cellContent, incN, decN, 
+            grayColor, rgbColor, f1HybridString,
+            showGenotype, showPhenotype
+         };
       }
     }).mount('#app');
   </script>
