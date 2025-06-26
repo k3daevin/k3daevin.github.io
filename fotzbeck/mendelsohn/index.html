@@ -24,7 +24,9 @@
 </head>
 <body>
   <div id="app">
-    <h1>Anzahl {{ n }}</h1>
+    <h1>Anzahl Gene: {{ n }}</h1>
+    <h2>F1 Hybrid Selbstung</h2>
+    <p>{{ f1HybridString() }} &#215; {{ f1HybridString() }}</p>
     <table>
       <tr v-for="i in rows" :key="i">
         <td v-for="j in cols" :key="j">
@@ -32,7 +34,7 @@
           <div
           v-if="i !== 1 && j !== 1"
           class="color-box"
-          :style="{ backgroundColor: grayColor(i-1, j-1) }"
+          :style="{ backgroundColor: rgbColor(i-1, j-1) }"
           :title="cellContent(i-1, j-1)"
         ></div>
         </td>
@@ -46,13 +48,22 @@
 
     createApp({
       setup() {
-        const n = ref(2)
+        const n = ref(1)
         const rows = computed(() => 1 + 2 ** n.value);
         const cols = ref(rows);
 
+        const A = x => String.fromCharCode(64 + x); //1->A, 2->B
+        const a = x => String.fromCharCode(96 + x); //1->a, 2->b
+
+        const f1HybridString = () => {
+            let s = "";
+            for (let k = 1; k <= n.value; ++k) {
+                s += A(k) + a(k)
+            }
+            return s;
+        }
+
         const cellContent = (i, j) => {
-            const A = x => String.fromCharCode(64 + x); //1->A, 2->B
-            const a = x => String.fromCharCode(96 + x); //1->a, 2->b
 
 
             if (i > j) {
@@ -126,10 +137,24 @@
 
         const rgbColor = (i, j) => {
             const value = simpleColor(i, j); // 0..1
-            const hue = value * 360; // Farbumfang (HSL)
-            // HSL -> RGB (einfacher Browser-String)
-            return `hsl(${hue}, 100%, 50%)`;
+            const scaled = value * 6;        // 0..6 für 6 Abschnitte
+            const section = Math.floor(scaled);
+            const t = scaled - section;      // Interpolation in Abschnitt
+
+            let r = 0, g = 0, b = 0;
+
+            switch (section) {
+                case 0: r = 255; g = Math.round(255 * t); b = 0; break;         // rot → gelb
+                case 1: r = Math.round(255 * (1 - t)); g = 255; b = 0; break;   // gelb → grün
+                case 2: r = 0; g = 255; b = Math.round(255 * t); break;        // grün → cyan
+                case 3: r = 0; g = Math.round(255 * (1 - t)); b = 255; break;  // cyan → blau
+                case 4: r = Math.round(255 * t); g = 0; b = 255; break;        // blau → magenta
+                case 5: r = 255; g = 0; b = Math.round(255 * (1 - t)); break;  // magenta → rot
+            }
+
+            return `rgb(${r}, ${g}, ${b})`;
         };
+
 
 
         const incN = () => {
@@ -140,7 +165,7 @@
             n.value--;
         }
 
-        return { n, rows, cols, cellContent, incN, decN, simpleColor, grayColor, rgbColor };
+        return { n, rows, cols, cellContent, incN, decN, simpleColor, grayColor, rgbColor, f1HybridString };
       }
     }).mount('#app');
   </script>
