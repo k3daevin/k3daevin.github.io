@@ -70,7 +70,20 @@
                 s += A(k) + a(k)
             }
             return s;
-        }
+        };
+
+        const haploid = i => {
+            let s = ""
+            for (let k = 0; k < n.value; ++k) {
+                const mask = 1 << k;
+                if ((i & mask) == 0) {
+                    s += A(k + 1);
+                } else {
+                    s += a(k + 1);
+                }
+            }
+            return s;
+        };
 
         const cellContent = (i, j) => {
 
@@ -84,43 +97,26 @@
                     return "";
                 }
                 j--;
-                let s = "";
-                for (let k = 1; k <= n.value; ++k) {
-                    const bit = j & 1;
-                    if (bit == 0) 
-                        s += A(k);
-                    else
-                        s += a(k);
-                    j >>= 1;
-                }
-                return s;
+                return haploid(j);
             }
 
             i--;
             j--;
+
             let s = "";
-            for (let k = 1; k <= n.value; ++k) {
-                const ibit = i & 1;
-                i >>= 1;
-                const jbit = j & 1;
-                j >>= 1;
-                switch(ibit + jbit) {
-                    case 0:
-                        s += A(k) + A(k);
-                        break;
-                    case 1:
-                        s += A(k) + a(k);
-                        break;
-                    case 2:
-                        s += a(k) + a(k);
-                        break;
+
+            const P1 = haploid(i);
+            const P2 = haploid(j);
+            for (let k = 0; k < n.value; ++k) {
+                const a1 = P1[k];
+                const a2 = P2[k];
+                if (a1 <= a2) {
+                    s += a1 + a2;
+                } else {
+                    s += a2 + a1;
                 }
             }
-
             return s;
-
-            // Beispiel: Summe der Koordinaten
-            return i + j;
         };
 
         const getColorGenotyp = (i, j) => {
