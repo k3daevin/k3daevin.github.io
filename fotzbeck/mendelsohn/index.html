@@ -15,7 +15,7 @@
       width: 3rem;
       height: 3rem;
     }
-    .color-box {
+    .box {
       width: 100%;
       height: 100%;
       display: block;
@@ -31,15 +31,17 @@
         <button @click="showGenotype">Genotyp</button>        
         <button @click="showPhenotype">Phänotyp</button>        
     </div>
-    <table>
-      <tr v-for="i in rows" :key="i">
-        <td v-for="j in cols" :key="j">
+    <table :class="mode">
+      <tr v-for="i in rows" :key="i"
+      :class="haploid(i-2)"
+      >
+        <td v-for="j in cols" :key="j"
+        :class="haploid(j-2)"
+        >
           {{ cellContent(i-1, j-1) }} <br>
           <div
           v-if="i !== 1 && j !== 1"
-          class="color-box"
-          :style="{ backgroundColor: rgbColor(i-1, j-1) }"
-          :title="cellContent(i-1, j-1)"
+          class="box"
         ></div>
         </td>
       </tr>
@@ -50,11 +52,23 @@
   <script>
     const { createApp, ref, computed } = Vue;
 
+    function updateDynamicStyle(cssText, id = 'dynamic-style') {
+      let el = document.getElementById(id);
+      if (!el) {
+        el = document.createElement('style');
+        el.id = id;
+        document.head.appendChild(el);
+      }
+      el.textContent = cssText;
+    }
+
     createApp({
       setup() {
         const n = ref(1)
         const rows = computed(() => 1 + 2 ** n.value);
         const cols = ref(rows);
+
+        const mode = ref("geno"); // oder "pheno"
 
         const PHENOTYPE = 1
         const GENOTYPE = 2
@@ -85,6 +99,20 @@
             return s;
         };
 
+        const mixHaploids = (P1, P2) => {
+            let s = "";
+            for (let k = 0; k < n.value; ++k) {
+                const a1 = P1[k];
+                const a2 = P2[k];
+                if (a1 <= a2) {
+                    s += a1 + a2;
+                } else {
+                    s += a2 + a1;
+                }
+            }
+            return s;
+        }
+
         const cellContent = (i, j) => {
 
 
@@ -103,71 +131,14 @@
             i--;
             j--;
 
-            let s = "";
-
             const P1 = haploid(i);
             const P2 = haploid(j);
-            for (let k = 0; k < n.value; ++k) {
-                const a1 = P1[k];
-                const a2 = P2[k];
-                if (a1 <= a2) {
-                    s += a1 + a2;
-                } else {
-                    s += a2 + a1;
-                }
-            }
+            const s = mixHaploids(P1, P2);
             return s;
         };
 
-        const getColorGenotyp = (i, j) => {
-            const maxValue = 2 ** (2 * n.value);
-            const genotyp = cellContent(i, j);
-            let v = 0;
-            for (let x of genotyp) {
-                if (x.charCodeAt(0) >= 97) {
-                    v++;
-                }
-                v <<= 1;
-            }
-            const value_latent = v >> 1;
-            const value_normal = value_latent / maxValue;
-            return value_normal;
-        }
 
-        const getColorPhenotyp = (i, j) => {
-            const maxValue = 2 ** n.value;
-            const genotyp = cellContent(i, j);
-            let v = 0;
-            for (let i = 0; i < genotyp.length; i += 2) {
-                if (genotyp.charCodeAt(i) < 97 ||
-                    genotyp.charCodeAt(i + 1) < 97) {
-                    v++;
-                }
-                v <<= 1;                
-            }
-
-            const value_latent = v >> 1;
-            const value_normal = value_latent / maxValue;
-            return value_normal;
-        }
-
-        const getColor = (i, j) => {
-            switch(showtype.value) {
-                case GENOTYPE:
-                    return getColorGenotyp(i, j);
-                case PHENOTYPE:
-                    return getColorPhenotyp(i, j);
-            }
-        }
-
-        const grayColor = (i, j) => {
-          const value = getColor(i, j);
-          const gray = Math.round(value * 255);
-          return `rgb(${gray}, ${gray}, ${gray})`;
-        };
-
-        const rgbColor = (i, j) => {
-            const value = getColor(i, j); // 0..1
+        const rgbColor = (value) => {
             const scaled = value * 6;        // 0..6 für 6 Abschnitte
             const section = Math.floor(scaled);
             const t = scaled - section;      // Interpolation in Abschnitt
@@ -183,32 +154,121 @@
                 case 5: r = 255; g = 0; b = Math.round(255 * (1 - t)); break;  // magenta → rot
             }
 
-            return `rgb(${r}, ${g}, ${b})`;
+            return `rgb(${r},${g},${b})`;
         };
 
+        const getColorGenotyp = (genotyp) => {
+            const maxValue = 2 ** (2 * n.value);
+            let v = 0;
+            for (let x of genotyp) {
+                if (x.charCodeAt(0) >= 97) {
+                    v++;
+                }
+                v <<= 1;
+            }
+            const value_latent = v >> 1;
+            const value_normal = value_latent / maxValue;
+            return value_normal;
+        }
 
+        const getColorPhenotyp = (genotyp) => {
+            const maxValue = 2 ** n.value;
+            let v = 0;
+            for (let i = 0; i < genotyp.length; i += 2) {
+                if (genotyp.charCodeAt(i) < 97 ||
+                    genotyp.charCodeAt(i + 1) < 97) {
+                    v++;
+                }
+                v <<= 1;                
+            }
+
+            const value_latent = v >> 1;
+            const value_normal = value_latent / maxValue;
+            return value_normal;
+        }
+
+        const precalc = () => {
+            let gens = [];
+
+            for (let i = 0; i < 2**n.value; ++i) {
+                gens.push(haploid(i));
+            }
+
+            let F2 = [];
+            for (let P1 of gens) {
+                for (let P2 of gens) {
+                    F2.push({
+                        A: P1,
+                        B: P2,
+                        X: mixHaploids(P1, P2),
+                    })
+                }
+            }
+
+            const makeColors = (g2f) => {
+                const m = new Map();
+                for (const f2 of F2) {
+                    const color = rgbColor(g2f(f2.X));
+                    if (m.has(color)) {
+                        m.get(color).push(f2);
+                    } else {
+                        m.set(color, [f2]);
+                    }
+                }
+                return m;
+            }
+
+            const toCSS = (m, classname) => {
+                let css = ""
+                const append = (s) => css += s;
+                for (const [color, f2List] of m) {
+                    for (let i = 0; i < f2List.length; ++i) {
+                        const suffix = i < f2List.length - 1 ? ",\n" : " {\n";
+
+                        const f2 = f2List[i];
+
+                        const str = `.${classname} tr.${f2.A} td.${f2.B} .box${suffix}`
+                        append(str);
+                    }
+                    append(`background-color:${color};\n}\n`)
+                }
+                return css;
+            }
+
+            let cp = toCSS(makeColors(getColorPhenotyp), "pheno");
+            let cg = toCSS(makeColors(getColorGenotyp), "geno");
+
+            return cp + "\n" + cg;
+        }
+
+        updateDynamicStyle(precalc());
 
         const incN = () => {
             n.value++;
+            updateDynamicStyle(precalc());
         }
         const decN = () => {
             if (n.value <= 1) return;
             n.value--;
+            updateDynamicStyle(precalc());
         }
 
         const showGenotype = () => {
             showtype.value = GENOTYPE;
+            mode.value = "geno";
         }
 
         const showPhenotype = () => {
             showtype.value = PHENOTYPE;
+            mode.value = "pheno"
         }
 
         return {
             n, rows, cols, 
             cellContent, incN, decN, 
-            grayColor, rgbColor, f1HybridString,
-            showGenotype, showPhenotype
+            rgbColor, f1HybridString,
+            showGenotype, showPhenotype,
+            haploid, mixHaploids, mode
          };
       }
     }).mount('#app');
