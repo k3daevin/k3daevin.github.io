@@ -5,6 +5,11 @@ let options = {
 
 const img = {}
 
+const Facing = {
+  Left: -1,
+  Right: 1,
+}
+
 function preload() {
   img.tony = {}
   img.tony.still = loadImage('/assets/images/sprites/tony_still.jpg')
