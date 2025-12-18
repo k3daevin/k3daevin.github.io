@@ -5,10 +5,18 @@ class Tony {
     this.vx = 0;
     this.vy = 0;
     this.image = img.tony.still;
+    this.facing = Facing.Right;
   }
   draw() {
-    rect(this.x-10, this.y-10, 20, 20);
-    image(this.image, this.x-50, this.y-75, 100, 150);
+    if (this.facing === Facing.Right) {
+        image(this.image, this.x-50, this.y-75, 100, 150);
+    } else {
+        push();
+        translate(this.x, 0);
+        scale(-1, 1);
+        image(this.image, -50, this.y-75, 100, 150);
+        pop();
+    }
   }
   advance(dt, ax, ay) {
     this.vx += dt * ax;
@@ -28,6 +36,8 @@ class Tony {
     pminust.setMag(options.pushforce);
     this.vx = pminust.x;
     this.vy = pminust.y;
+
+    this.facing = (pminust.x < 0) ? Facing.Left : Facing.Right;
   }
   out_of_bounds() {
     return (this.x < 0 || this.x + 20 > width || this.y < 0 || this.y +20 > height);
