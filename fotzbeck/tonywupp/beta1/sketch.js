@@ -3,6 +3,13 @@ let options = {
   pushforce: 100,
 };
 
+const img = {}
+
+function preload() {
+  img.tony = {}
+  img.tony.still = loadImage('/assets/images/sprites/tony_still.jpg')
+  img.tony.wupp = loadImage('/assets/images/sprites/tony_wupp.jpg')
+}
 
 class Tony {
   constructor() {
@@ -10,9 +17,11 @@ class Tony {
     this.y = height/2;
     this.vx = 0;
     this.vy = 0;
+    this.image = img.tony.still;
   }
   draw() {
     rect(this.x-10, this.y-10, 20, 20);
+    image(this.image, this.x-50, this.y-75, 100, 150);
   }
   advance(dt, ax, ay) {
     this.vx += dt * ax;
@@ -21,6 +30,10 @@ class Tony {
     this.y += dt * this.vy;
   }
   push(px, py) {
+    this.image = img.tony.wupp;
+    setTimeout(() => {
+      this.image = img.tony.still;
+    }, 200);
     const p = createVector(px, py)
     const t = createVector(this.x, this.y)
     t.mult(-1);
@@ -51,7 +64,7 @@ function mousePressed() {
 function setup() {
   createCanvas(400, 400);
   tony = new Tony();
-  wuppSound = createAudio('wupp.m4a');
+  wuppSound = createAudio('/assets/audio/tony/wupp-demo-kev.m4a');
   clicker = {
     click: (x, y) => {
       wuppSound.play();
@@ -62,9 +75,9 @@ function setup() {
 
 function draw() {
   const dt = 1. / frameRate();
-  background(220);
-  tony.draw();
+  background(247);
   tony.advance(dt, 0, options.gravity);
+  tony.draw();
   if (tony.out_of_bounds()) {
     tony = new Tony();
   }
