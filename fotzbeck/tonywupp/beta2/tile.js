@@ -1,25 +1,5 @@
-const TILE_SIZE = 40;
+const TILE_SIZE = 20;
 
-const VIEWPORT = {
-  width: 800,
-  height: 800
-};
-
-const DEADZONE = {
-  width: VIEWPORT.width * 0.7,
-  height: VIEWPORT.height * 0.7
-};
-
-const player = {
-  x: 0,
-  y: 0,
-  speed: 200 // world units / second
-};
-
-const camera = {
-  x: 0,
-  y: 0
-};
 
 function updateCamera() {
   const dzLeft   = camera.x + (VIEWPORT.width  - DEADZONE.width)  / 2;
@@ -42,10 +22,20 @@ function updateCamera() {
 
 // sehr einfache Noise-Funktion (deterministisch)
 function pseudoNoise(x, y) {
-  return (
-    Math.sin(x * 12.9898 + y * 78.233) * 43758.5453
-  ) % 1;
+  // Basis-Noise (low frequency)
+  const base =
+    Math.sin(x * 12.9898 + y * 78.233) * 43758.5453;
+
+  // Diagonaler High-Frequency-Noise
+  const diagonal =
+    Math.sin((x + y) * 90.123) * 15731.743;
+
+  // Kombinieren
+  const combined = base + diagonal * 0.25;
+
+  return combined - Math.floor(combined); // sauber auf [0..1)
 }
+
 
 function tileColor(worldX, worldY) {
   const n = pseudoNoise(worldX * 0.1, worldY * 0.1);
@@ -56,23 +46,24 @@ function tileColor(worldX, worldY) {
   return "#95a5a6";              // stone
 }
 
-function drawTiles() {
+function drawTiles(camera) {
   const startX = Math.floor(camera.x / TILE_SIZE);
   const startY = Math.floor(camera.y / TILE_SIZE);
 
-  const endX = startX + Math.ceil(VIEWPORT.width / TILE_SIZE) + 1;
-  const endY = startY + Math.ceil(VIEWPORT.height / TILE_SIZE) + 1;
+  const endX = startX + Math.ceil(camera.viewWidth / TILE_SIZE) + 1;
+  const endY = startY + Math.ceil(camera.viewHeight / TILE_SIZE) + 1;
 
   for (let ty = startY; ty < endY; ty++) {
     for (let tx = startX; tx < endX; tx++) {
       const worldX = tx * TILE_SIZE;
       const worldY = ty * TILE_SIZE;
+      const { x, y } = camera.worldToScreen(worldX, worldY);
         push()
         fill(tileColor(tx, ty))
         noStroke()  
         rect(
-            worldX - camera.x,
-            worldY - camera.y,
+            x,
+            y,
             TILE_SIZE,
             TILE_SIZE
         );
@@ -81,14 +72,3 @@ function drawTiles() {
   }
 }
 
-function drawPlayer() {
-  push();
-    fill(255, 0, 0);
-  rect(
-    player.x - camera.x - 8,
-    player.y - camera.y - 8,
-    16,
-    16
-  );
-    pop();
-}

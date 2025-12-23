@@ -1,6 +1,6 @@
 let options = {
   gravity: 30,
-  pushforce: 500,
+  pushforce: 250,
 };
 
 const img = {}
@@ -11,9 +11,7 @@ const Facing = {
 }
 
 function preload() {
-  img.tony = {}
-  img.tony.still = loadImage('/assets/images/sprites/tony_still.jpg')
-  img.tony.wupp = loadImage('/assets/images/sprites/tony_wupp.jpg')
+  preloadAssetsAndStuff();
 }
 
 
@@ -21,6 +19,7 @@ function preload() {
 let tony;
 let clicker;
 let wuppSound;
+let pickupManager;
 
 function touchStarted() {
   clicker.click(mouseX, mouseY);
@@ -32,10 +31,18 @@ function mousePressed() {
   return false;
 }
 
+const camera = new Camera(400, 400, 0.6);
+
+
 function setup() {
-  createCanvas(VIEWPORT.width, VIEWPORT.height);
-  tony = new Tony();
+  createCanvas(camera.viewWidth, camera.viewHeight);
+  tony = new Tony(options.tonydata);
   wuppSound = createAudio('/assets/audio/tony/wupp-demo-kev.m4a');
+  pickupManager = new PickupManager({
+    maxPickups: 100,
+    pickups: options.pickups,
+    tiers: options.tiers,
+  });
   clicker = {
     click: (x, y) => {
       wuppSound.play();
@@ -48,11 +55,15 @@ function draw() {
   const dt = 1. / frameRate();
   background(255);
   
-  player.x = tony.x;
-  player.y = tony.y;
-  updateCamera();
-  drawTiles();
-  tony.draw(camera);
   tony.advance(dt);
+
+  camera.update(tony.x, tony.y);
+  drawTiles(camera);
+
+
+  pickupManager.removeAddPickups(camera, tony);
+  pickupManager.draw(camera);
+
+  tony.draw(camera);
 
 }
