@@ -1,0 +1,10 @@
+{
+    "width": 50,
+    "height": 90,
+    "pushforce": 250,
+    "images": {
+        "still": "/assets/images/sprites/tony/tony_still.png",
+        "wupp": "/assets/images/sprites/tony/tony_wupp.png",
+        "crash": "/assets/images/sprites/tony/tony_crash.png"
+    }
+}

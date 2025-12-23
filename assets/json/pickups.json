@@ -1,0 +1,55 @@
+{
+    "max_extent": 20,
+    "pickups": [
+        {
+            "image": "/assets/images/sprites/items/diamant.png",
+            "points": 10,
+            "tier": 1
+        },
+        {
+            "image": "/assets/images/sprites/items/donut.png",
+            "points": 25,
+            "tier": 2
+        },
+        {
+            "image": "/assets/images/sprites/items/geschenk.png",
+            "points": 100,
+            "tier": 3
+        },
+        {
+            "image": "/assets/images/sprites/items/gipfeli.png",
+            "points": 200,
+            "tier": 4
+        },
+        {
+            "image": "/assets/images/sprites/items/gurke.png",
+            "points": 500,
+            "tier": 5
+        },
+        {
+            "image": "/assets/images/sprites/items/herz.png",
+            "points": 15,
+            "tier": 1
+        },
+        {
+            "image": "/assets/images/sprites/items/kaese.png",
+            "points": 35,
+            "tier": 2
+        },
+        {
+            "image": "/assets/images/sprites/items/pilz.png",
+            "points": 80,
+            "tier": 3
+        },
+        {
+            "image": "/assets/images/sprites/items/sandwich.png",
+            "points": 200,
+            "tier": 4
+        },
+        {
+            "image": "/assets/images/sprites/items/stern.png",
+            "points": 600,
+            "tier": 5
+        }
+    ]
+}

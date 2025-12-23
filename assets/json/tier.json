@@ -1,0 +1,29 @@
+{
+    "tiers": [
+        {
+            "number": 1,
+            "rank": "common",
+            "range": [0, 30]
+        },
+        {
+            "number": 2,
+            "rank": "uncommon",
+            "range": [11, 40]
+        },
+        {
+            "number": 3,
+            "rank": "rare",
+            "range": [30, 60]
+        },
+        {
+            "number": 4,
+            "rank": "epic",
+            "range": [55, 80]
+        },
+        {
+            "number": 5,
+            "rank": "legendary",
+            "range": [80, 100]
+        }
+    ]
+}
