@@ -7,14 +7,19 @@ class PickupManager {
   }
   
   takeRandomPickupDefinition(x, y) {
-    const dist = Math.sqrt(x*x+y*y) / TILE_SIZE;
-    const filteredTiers = this.tiers.filter(tier => tier.isInRange(dist));
-    const tierIndex = Math.floor(Math.random() * filteredTiers.length);
-    const tier = filteredTiers ? filteredTiers[tierIndex] : this.tiers[0];
-    const defsInTier = this.pickupDefinitions.filter(def => def.tier === tier.number);
-    const defIndex = Math.floor(Math.random() * defsInTier.length);
-    const def = defsInTier[defIndex];
-    return new Pickup(x, y, def);
+    try {
+      const dist = Math.sqrt(x*x+y*y) / TILE_SIZE;
+      const filteredTiers = this.tiers.filter(tier => tier.isInRange(dist));
+      const tierIndex = Math.floor(Math.random() * filteredTiers.length);
+      const tier = filteredTiers.length > 0 ? filteredTiers[tierIndex] : this.tiers[0];
+      const defsInTier = this.pickupDefinitions.filter(def => def.tier === tier.number);
+      const defIndex = Math.floor(Math.random() * defsInTier.length);
+      const def = defsInTier[defIndex];
+      return new Pickup(x, y, def);
+    } catch (e) {
+      console.error('Error taking random pickup definition:', e);
+      return new Pickup(x, y, this.pickupDefinitions[0]);
+    }
   }
 
   removeAddPickups(camera, player) {
